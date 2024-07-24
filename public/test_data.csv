@@ -1,0 +1,91 @@
+Designation,Region,Country,Appellation,EstateDate,Latitude,Longitude
+Clos de Tart,Burgundy,France,AOC,1939,,
+Coteaux du Languedoc,Languedoc-Roussillon,France,AOC,1985,,
+Auxey-Duresses,Burgundy,France,AOC,1970,,
+Muscat de Saint-Jean de Minervois,Languedoc-Roussillon,France,AOC,1949,,
+Moulis or Moulis-en-Médoc,Bordeaux,France,AOC,1938,,
+Costières de Nîmes,Rhône,France,AOC,1986,,
+Côtes du Jura,Jura,France,AOC,1937,,
+Fleurie,Beaujolais,France,AOC,1936,,
+Côte Roannaise,Loire,France,AOC,1994,,
+Coteaux de Pierrevert,Provence,France,AOC,1998,,
+Crémant du Jura,Jura,France,AOC,1995,,
+Anjou,Loire,France,AOC,1936,,
+Muscat de Mireval,Languedoc-Roussillon,France,AOC,1959,,
+Saint-Amour,Beaujolais,France,AOC,1946,,
+Saint-Sardos,South West France,France,AOC,2011,,
+Coteaux Champenois,Champagne,France,AOC,1974,,
+Nuits-Saint-Georges,Burgundy,France,AOC,1972,,
+Anjou-Gamay,Loire,France,AOC,1936,,
+Vosne-Romanée,Burgundy,France,AOC,1936,,
+Coteaux de l'Aubance,Loire,France,AOC,1950,,
+Sauternes,Bordeaux,France,AOC,1936,,
+Jurançon,South West France,France,AOC,1936,,
+Beaujolais,Beaujolais,France,AOC,1937,,
+Coteaux du Tricastin,Rhône,France,AOC,1973,,
+Coteaux d'Aix-en-Provence,Provence,France,AOC,1985,,
+Saint-Pourçain,Loire,France,AOC,2009,,
+Crémant de Bordeaux,Bordeaux,France,AOC,1990,,
+Lirac,Rhône,France,AOC,1947,,
+Chevalier-Montrachet,Burgundy,France,AOC,1937,,
+Albana di Romagna,Emilia-Romagna,Italy,DOCG,1980,44.3,11.9
+Franciacorta,Lombardia,Italy,DOCG,1990,45.6,10
+Barbaresco,Piedmont,Italy,DOCG,1985,44.7,8.1
+Gattinara,Piedmont,Italy,DOCG,1995,45.7,8.4
+Barbera d'Asti,Piedmont,Italy,DOCG,1978,44.9,8.2
+Moscato di Scanzo,Lombardia,Italy,DOCG,2000,45.7,9.7
+Oltrepo Pavese Metodo Classico,Lombardia,Italy,DOC,1988,45,9.1
+Soave Superiore,Veneto,Italy,DOC,1992,45.4,11.2
+Conegliano Valdobbiadene Prosecco,Veneto,Italy,DOC,1986,45.9,12.3
+Dolcetto di Dogliani Superiore,Piedmont,Italy,DOCG,1975,44.6,7.9
+Colline Teramane Montepulciano d'Abruzzo,Abruzzo,Italy,DOCG,1985,42.7,13.8
+Cannellino di Frascati,Lazio,Italy,DOC,1990,41.9,12.5
+Cesanese del Piglio,Lazio,Italy,DOCG,1992,41.8,13.2
+Frascati Superiore,Lazio,Italy,DOC,1991,41.9,12.5
+Brunello di Montalcino,Toscana,Italy,DOCG,1983,43.1,11.5
+Chianti Classico,Toscana,Italy,DOCG,1986,43.5,11.2
+Vernaccia di San Gimignano,Toscana,Italy,DOC,1993,43.5,11
+Sagrantino di Montefalco,Umbria,Italy,DOCG,1989,42.9,12.6
+Torgiano Rosso Riserva,Umbria,Italy,DOCG,1988,43,12.4
+Elba Aleatico Passito,Toscana,Italy,DOC,1994,42.8,10.3
+Aglianico del Vulture Superiore,Basilicata,Italy,DOCG,1990,40.6,15.8
+Aglianico del Taburno,Campania,Italy,DOC,1985,41.1,14.8
+Fiano di Avellino,Campania,Italy,DOC,1992,40.9,14.8
+Greco di Tufo,Campania,Italy,DOC,1988,40.9,14.8
+Taurasi,Campania,Italy,DOCG,1993,40.9,14.9
+Castel del Monte Bombino Nero,Puglia,Italy,DOC,1980,41.1,16.2
+Castel del Monte Nero di Troia Reserva,Puglia,Italy,DOCG,1991,41,16.1
+Castel del Monte Rosso Riserva,Puglia,Italy,DOC,1987,41,16.1
+Primitivo di Manduria Dolce Naturale,Puglia,Italy,DOC,1989,40.4,17.3
+Vermentino di Gallura,Sardinia,Italy,DOCG,1994,40.9,9.5
+Condado de Huelva,Andalusia,Spain,DO,,,
+Granada,Andalusia,Spain,DO,,,
+Jerez-Xeres-Sherry,Andalusia,Spain,DO,,,
+Lebrija,Andalusia,Spain,VC,,,
+Málaga,Andalusia,Spain,DO,,,
+Manzanilla-Sanlúcar de Barrameda,Andalusia,Spain,DO,,,
+Montilla-Moriles,Andalusia,Spain,DO,,,
+Sierras de Málaga,Andalusia,Spain,DO,,,
+Calatayud,Aragon,Spain,DO,,,
+Campo de Borja,Aragon,Spain,DO,,,
+Cariñena,Aragon,Spain,DO,,,
+Somontano,Aragon,Spain,DO,,,
+Cava,Multi-regional,Spain,DO,,,
+Arlanza,Castile and León,Spain,DO,,,
+Arribes,Castile and León,Spain,DO,,,
+Bierzo,Castile and León,Spain,DO,,,
+Cigales,Castile and León,Spain,DO,,,
+Ribera del Duero,Castile and León,Spain,DO,,,
+Rueda,Castile and León,Spain,DO,,,
+Alella,Catalonia,Spain,DO,,,
+Conca de Barberà,Catalonia,Spain,DO,,,
+Costers del Segre,Catalonia,Spain,DO,,,
+Empordà,Catalonia,Spain,DO,,,
+Montsant,Catalonia,Spain,DO,,,
+Penedès,Catalonia,Spain,DO,,,
+Priorat,Catalonia,Spain,DOCa,,,
+Terra Alta,Catalonia,Spain,DO,,,
+Rías Baixas,Galicia,Spain,DO,,,
+Ribeira Sacra,Galicia,Spain,DO,,,
+Ribeiro,Galicia,Spain,DO,,,
+Valdeorras,Galicia,Spain,DO,,,
