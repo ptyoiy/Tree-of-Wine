@@ -5,18 +5,19 @@ import { isChildrenTree, Tree, WineData } from '../../utils/makeTree';
 
 type RadialDendrogramProps = {
   width: number;
+  fontSize: number;
   data: Tree | WineData;
   columns: (keyof WineData)[];
   fittingToTheEnd: boolean;
 };
 
-export function RadialDendrogram({ width, data, columns, fittingToTheEnd }: RadialDendrogramProps) {
-  const { svgRef } = useRenderChart({ width, data, columns, fittingToTheEnd });
+export function RadialDendrogram({ width, data, fontSize, columns, fittingToTheEnd }: RadialDendrogramProps) {
+  const { svgRef } = useRenderChart({ width, data, fontSize, columns, fittingToTheEnd });
 
   return <svg ref={svgRef}></svg>;
 }
 
-function useRenderChart({ width, data, columns, fittingToTheEnd }: RadialDendrogramProps) {
+function useRenderChart({ width, data, fontSize, columns, fittingToTheEnd }: RadialDendrogramProps) {
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
   const radius = width / 2;
 
@@ -98,7 +99,7 @@ function useRenderChart({ width, data, columns, fittingToTheEnd }: RadialDendrog
       .attr('viewBox', `${box.x} ${box.y} ${box.width} ${box.height}`)
       .style('margin', '-50px')
       .style('box-sizing', 'border-box')
-      .style('font', '9px sans-serif');
+      .style('font', `${fontSize}px sans-serif`);
   }, [width])
   return { svgRef };
 }
