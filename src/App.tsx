@@ -1,6 +1,6 @@
 import { Container, Paper, ToggleButton } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { RadialDendrogram } from './components/charts';
+import { RadialDendrogram } from './components/charts/TreeOfWine';
 import { LoadingBoundary } from './components/layout/LoadingBoundary';
 import { useWineDataCsv } from './utils/csvHandler';
 import { makeTree, WineData } from './utils/makeTree';
@@ -13,7 +13,8 @@ import { makeTree, WineData } from './utils/makeTree';
  * 위 상황에서 만약 분기 도중 EstateDate 속성의 값이 없을 경우
  * Country, Region, Designation 3단계로 분기됨
  */
-const columns: (keyof WineData)[] = ['Country', 'Region', 'EstateDate', 'Designation'];
+const columns: (keyof WineData)[] = ['Country', 'Region', 'Designation'];
+
 function App() {
   const { data: csvData, isLoading } = useWineDataCsv();
   const { data, fittingToTheEnd, handleToggleChange } = useData(csvData);
@@ -22,10 +23,10 @@ function App() {
       <Container>
         <Paper
           elevation={5}
-          sx={{ display: 'flex', 'align-items': 'flex-start', overflow: 'hidden' }}
+          sx={{ display: 'flex', alignItems: 'flex-start', overflow: 'hidden' }}
         >
           <RadialDendrogram
-            width={700}
+            width={800}
             fontSize={9.5}
             data={data}
             columns={columns}
