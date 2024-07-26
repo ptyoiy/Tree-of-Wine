@@ -49,7 +49,20 @@ function useRenderChart({
       .radius((d) => d.y!);
     const r = 3;
     const svg = d3.select(svgRef.current);
-    const g = svg.append('g').attr('transform', `translate(0, ${-30})`);
+    /** 회전을 위해 두 g 생성
+     * @var {mouse-move} mousemove 이벤트때 회전시킬 요소
+     * @var {mouse-up} mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 요소
+     *
+     * 두 회전은 따로 작동함
+     ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
+     ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
+     *
+     * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
+     * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
+     */
+    const outerG = svg.append('g').attr('class', 'mouse-move');
+    const g = outerG.append('g').attr('class', 'mouse-up');
+
     const link = g
       .append('g')
       .attr('fill', 'none')
@@ -74,14 +87,12 @@ function useRenderChart({
     node
       .append('circle')
       .attr('cursor', 'pointer')
-      .attr('fill', (d) => {
-        return d.depth === 0 ? '#555' : color(getCountry(d));
-      })
+      .attr('fill', (d) => d.depth === 0 ? '#555' : color(getCountry(d)))
       .attr('r', r)
       .on('mouseover', (e, d) => {
         if ('Country' in d.data) onMouseOver(e, d.data);
       })
-      .on('mouseout', (e, d) => {
+      .on('mouseout', (_e, d) => {
         if ('Country' in d.data) onMouseOut();
       });
 
@@ -94,7 +105,7 @@ function useRenderChart({
       .on('mouseover', (e, d) => {
         if ('Country' in d.data) onMouseOver(e, d.data);
       })
-      .on('mouseout', (e, d) => {
+      .on('mouseout', (_e, d) => {
         if ('Country' in d.data) onMouseOut();
       })
       .text((d) => {
@@ -115,15 +126,84 @@ function useRenderChart({
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const box = svg.select<SVGGElement>('g.node-group').node()!.getBBox();
-    const { x, y, width, height } = box;
+    const parent = d3.select(svgRef.current.parentElement);
+    const parentLeft = +parent.style('offsetLeft');
+    const parentTop = +parent.style('offsetTop');
+    const size = box.width - 100;
+    const halfSize = size / 2;
+    const { PI } = Math;
     svg
-      .attr('width', width)
-      .attr('height', height - 100)
-      .attr('viewBox', `${x} ${y} ${width} ${height - 100}`)
-      .style('margin', '-50px')
+      .attr('width', size)
+      .attr('height', size)
+      .attr('transform', `translate(50, -10)`)
       .style('box-sizing', 'border-box')
+
       .style('font', `${fontSize}px sans-serif`);
-  }, [width]);
+
+    svg.select('g.mouse-up').attr('transform', `translate(${halfSize}, ${halfSize})`);
+
+    function cross(a: number[], b: number[]) {
+      return a[0] * b[1] - a[1] * b[0];
+    }
+    function dot(a: number[], b: number[]) {
+      return a[0] * b[0] + a[1] * b[1];
+    }
+    function mouse({ pageX, pageY }: MouseEvent) {
+      return [pageX - parentLeft - halfSize, pageY - parentTop - halfSize];
+    }
+    function toRadian(rotate: number) {
+      return (rotate * PI) / 180;
+    }
+    function normalizeAngle(angle: number) {
+      return angle % (2 * PI);
+    }
+    let start: number[] | null = null,
+      rotate = 0;
+    parent
+      .on('mousedown', function (e: MouseEvent) {
+        svg.style('cursor', 'move');
+        start = mouse(e);
+        e.preventDefault();
+      })
+      .on('mousemove', function (e: MouseEvent) {
+        if (start) {
+          const m = mouse(e);
+          const delta = (Math.atan2(cross(start, m), dot(start, m)) * 180) / PI;
+          svg
+            .select('g.mouse-move')
+            .attr('transform', `rotate(${delta}, ${halfSize}, ${halfSize})`);
+        }
+      })
+      .on('mouseup', function (e: MouseEvent) {
+        if (start) {
+          svg.style('cursor', 'auto');
+          const m = mouse(e);
+          const delta = (Math.atan2(cross(start, m), dot(start, m)) * 180) / PI;
+          rotate += delta;
+          if (rotate > 360) rotate %= 360;
+          else if (rotate < 0) rotate = (360 + rotate) % 360;
+          start = null;
+          const rotateToRadian = toRadian(rotate);
+          svg.select('g.mouse-move').attr('transform', null);
+          svg
+            .select('g.mouse-up')
+            .attr('transform', `translate(${size / 2}, ${size / 2})rotate(${rotate})`)
+            .selectAll('text')
+            .attr('x', (d: any) =>
+              normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 6 : -6
+            )
+            .attr('text-anchor', (d: any) =>
+              normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 'start' : 'end'
+            )
+            .attr(
+              'transform',
+              (d: any) =>
+                'rotate(' + (normalizeAngle(d.x! + rotateToRadian) < PI ? 0 : 180) + ')'
+            );
+        }
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { svgRef, tooltipContent, tooltipVisible, tooltipCoords };
 }

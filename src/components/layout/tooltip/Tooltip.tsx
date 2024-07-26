@@ -5,8 +5,8 @@ interface TooltipProps {
   visible: boolean;
 }
 
-const height = document.body.clientHeight;
 const Tooltip: React.FC<TooltipProps> = ({ content, x, y, visible }) => {
+  const height = document.body.clientHeight;
   const top = y + (y < (height / 2) ? 10 : -180);
   const left = x + 10;
   return (

@@ -21,10 +21,7 @@ function App() {
   return (
     <LoadingBoundary isLoading={isLoading}>
       <Container>
-        <Paper
-          elevation={5}
-          sx={{ display: 'flex', alignItems: 'flex-start', overflow: 'hidden' }}
-        >
+        <Paper elevation={5} sx={{ display: 'flex', alignItems: 'flex-start', overflow: 'hidden' }}>
           <RadialDendrogram
             width={800}
             fontSize={9.5}
