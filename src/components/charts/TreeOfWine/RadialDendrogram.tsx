@@ -85,7 +85,9 @@ function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: n
     []
   );
 
-  /** node의 Country를 찾아 반환하는 함수 */
+  /** node의 Country를 찾아 반환하는 함수
+   * @variation depth 0 ~ n
+   */
   const getCountry = useCallback((d: d3.HierarchyNode<Tree | WineData>) => {
     const { depth, data } = d;
     // 말단 노드일 때

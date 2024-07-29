@@ -12,6 +12,7 @@ export function render(
   onMouseOver: (e: MouseEvent, d: WineData) => void,
   onMouseOut: () => void
 ) {
+  // TODO: key, join 기능 활용해서 remove 교체하기
   d3.select(svgRef.current).select('g').remove();
   const linkRadial = d3
     .linkRadial<d3.HierarchyLink<Tree | WineData>, d3.HierarchyNode<Tree | WineData>>()
