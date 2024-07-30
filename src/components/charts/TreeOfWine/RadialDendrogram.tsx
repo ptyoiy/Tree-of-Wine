@@ -73,6 +73,7 @@ function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: n
     const linkData = tree.links();
 
     return { nodeData, linkData };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
   /** Country 색 매핑 함수 */
