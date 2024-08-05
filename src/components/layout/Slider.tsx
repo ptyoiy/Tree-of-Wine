@@ -3,14 +3,24 @@ import Box from '@mui/material/Box';
 import Slider, { SliderThumb } from '@mui/material/Slider';
 import * as d3 from 'd3';
 import * as React from 'react';
+import {
+  getMarks,
+  normalizeAngle,
+  PI,
+  preventHorizontalKeyboardNavigation,
+  toRadian,
+} from '../../utils/sliderUtils';
 
 export default function RotateSlider({
   svgRef,
 }: {
   svgRef: React.MutableRefObject<SVGSVGElement>;
 }) {
+  const [sliderValue, setSliderValue] = React.useState(90);
+  const [rotateValue, setRotateValue] = React.useState(0);
   const sizeRef = React.useRef(0);
   const svgSelectionRef = React.useRef<d3.Selection<SVGSVGElement, unknown, null, undefined>>();
+
   React.useEffect(() => {
     const svgSelection = d3.select(svgRef.current);
     svgSelectionRef.current = svgSelection;
@@ -19,22 +29,32 @@ export default function RotateSlider({
     });
   }, [svgRef]);
 
-  const onChangeHandler = (delta: number) => {
-    // rotate += delta;
-    // if (rotate > 360) rotate %= 360;
-    // else if (rotate < 0) rotate = (360 + rotate) % 360;
-    const size = sizeRef.current;
-
+  const onChangeHandler = React.useCallback((value: number) => {
+    const halfSize = sizeRef.current / 2;
     svgSelectionRef.current
-      ?.select('g.mouse-up')
-      .attr('transform', `translate(${size / 2}, ${size / 2})rotate(${delta})`);
-  };
+      ?.select('g.mouse-move')
+      .attr('transform', `translate(50, 0)rotate(${value - 90}, ${halfSize}, ${halfSize})`);
 
-  /** 오래 걸리는 작업이라 onChange 종료 후 호출하도록 함 */
-  const onChangeCommittedHandler = (delta: number) => {
-    const rotateToRadian = toRadian(delta);
-    svgSelectionRef.current
-      ?.select('g.mouse-up')
+    setSliderValue(value);
+  }, []);
+
+  /** 오래 걸리는 작업은 onChange 종료 후 호출 */
+  const onChangeCommittedHandler = React.useCallback((value: number) => {
+    const svg = svgSelectionRef.current!;
+    const halfSize = sizeRef.current / 2;
+    let rotate = rotateValue;
+    rotate += value - 90;
+    // rotate %= 360;
+    if (rotate > 360) rotate %= 360;
+    else if (rotate < 0) rotate = (360 + rotate) % 360;
+    const rotateToRadian = toRadian(rotate);
+
+    svg
+      .select('g.mouse-move')
+      .attr('transform', `translate(50, 0)`);
+    svg
+      .select('g.mouse-up')
+      .attr('transform', `translate(${halfSize}, ${halfSize})rotate(${rotate})`)
       .selectAll('text')
       .attr('x', (d: any) => (normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 6 : -6))
       .attr('text-anchor', (d: any) =>
@@ -44,7 +64,10 @@ export default function RotateSlider({
         'transform',
         (d: any) => 'rotate(' + (normalizeAngle(d.x! + rotateToRadian) < PI ? 0 : 180) + ')'
       );
-  };
+
+    setSliderValue(90);
+    setRotateValue(rotate);
+  }, [rotateValue]);
 
   return (
     <Box
@@ -54,87 +77,29 @@ export default function RotateSlider({
         alignSelf: 'center',
       }}
     >
-      <AirbnbSlider
+      <GrabButtonSlider
         orientation="vertical"
         slots={{ thumb: Handle }}
         min={0}
-        max={90}
+        max={180}
+        value={sliderValue}
         defaultValue={90}
         aria-label="Rotate"
-        valueLabelDisplay="on"
-        valueLabelFormat={getValue}
-        marks={marks}
-        onChange={(_e, v) => onChangeHandler(getValue(v as number))}
-        onChangeCommitted={(_e, v) => onChangeCommittedHandler(getValue(v as number))}
+        valueLabelDisplay="auto"
+        valueLabelFormat={(slider) => {
+          const value = (slider - 90 + rotateValue + 360) % 360;
+          return `${value}˚`;
+        }}
+        marks={getMarks(rotateValue)}
+        onChange={(_e, v) => onChangeHandler(v as number)}
+        onChangeCommitted={(_e, v) => onChangeCommittedHandler(v as number)}
         onKeyDown={preventHorizontalKeyboardNavigation}
       />
     </Box>
   );
 }
 
-const marks = [
-  {
-    value: 0,
-    label: '90°',
-  },
-  {
-    value: 15,
-    label: '75°',
-  },
-  {
-    value: 30,
-    label: '60°',
-  },
-  {
-    value: 45,
-    label: '45°',
-  },
-  {
-    value: 60,
-    label: '30°',
-  },
-  {
-    value: 75,
-    label: '15°',
-  },
-  {
-    value: 90,
-    label: '0°',
-  },
-];
-const { PI } = Math;
-function preventHorizontalKeyboardNavigation(event: React.KeyboardEvent) {
-  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-    event.preventDefault();
-  }
-}
-function toRadian(rotate: number) {
-  return (rotate * PI) / 180;
-}
-function normalizeAngle(angle: number) {
-  return angle % (2 * PI);
-}
-function getValue(value: number) {
-  return 90 - value;
-}
-
-interface HandleProps extends React.HTMLAttributes<unknown> {}
-
-function Handle(props: HandleProps) {
-  const { children, ...other } = props;
-  return (
-    <SliderThumb {...other}>
-      {children}
-      <div className="wrapper">
-        <span className="airbnb-bar" />
-        <span className="airbnb-bar" />
-        <span className="airbnb-bar" />
-      </div>
-    </SliderThumb>
-  );
-}
-
-const AirbnbSlider = styled(Slider)(() => ({
+const GrabButtonSlider = styled(Slider)(() => ({
   height: '300px',
   '& .MuiSlider-thumb': {
     height: 27,
@@ -148,7 +113,7 @@ const AirbnbSlider = styled(Slider)(() => ({
       rotate: '90deg',
       display: 'flex',
     },
-    '& .airbnb-bar': {
+    '& .grab': {
       height: 9,
       width: 1,
       backgroundColor: 'currentColor',
@@ -156,11 +121,20 @@ const AirbnbSlider = styled(Slider)(() => ({
       marginRight: 1,
     },
   },
-  '& .MuiSlider-rail': {
-    color: '#3a8589',
-    opacity: 1,
-  },
-  '& .MuiSlider-track': {
-    color: '#bbd0cf',
-  },
 }));
+
+interface HandleProps extends React.HTMLAttributes<unknown> {}
+
+function Handle(props: HandleProps) {
+  const { children, ...other } = props;
+  return (
+    <SliderThumb {...other}>
+      {children}
+      <div className="wrapper">
+        <span className="grab" />
+        <span className="grab" />
+        <span className="grab" />
+      </div>
+    </SliderThumb>
+  );
+}

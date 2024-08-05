@@ -20,7 +20,19 @@ export function render(
     .radius((d) => d.y!);
   const r = 3;
   const svg = d3.select(svgRef.current);
-  const g = svg.append('g').attr('class', 'mouse-up');
+    /** 회전에 사용될 두 g
+   * @var g.mouse_move mousemove 이벤트때 회전시킬 g
+   * @var g.mouse_up mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 g
+   *
+   * 두 회전은 따로 작동함
+   ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
+   ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
+   *
+   * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
+   * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
+   */
+   const outerG = svg.append('g').attr('class', 'mouse-move');
+   const g = outerG.append('g').attr('class', 'mouse-up');
 
   g // link
     .append('g')
