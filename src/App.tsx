@@ -21,7 +21,25 @@ function App() {
   return (
     <LoadingBoundary isLoading={isLoading}>
       <Container>
-        <Paper elevation={5} sx={{ display: 'flex', alignItems: 'flex-start', overflow: 'hidden' }}>
+        <Paper
+          elevation={5}
+          sx={{
+            display: 'grid',
+            gridTemplateRows: '50px auto',
+            gridTemplateColumns: 'auto 150px',
+            width: 'fit-content',
+            height: '100vh',
+            overflow: 'hidden'
+          }}
+        >
+          <ToggleButton
+            sx={{ position: 'relative', right: 0, gridRow: '1 / 2', gridColumn: '2 / 3' }}
+            selected={fittingToTheEnd}
+            value={'fittingToTheEnd'}
+            onChange={handleToggleChange}
+          >
+            fitting To The End
+          </ToggleButton>
           <RadialDendrogram
             width={800}
             fontSize={9.5}
@@ -29,13 +47,6 @@ function App() {
             columns={columns}
             fittingToTheEnd={fittingToTheEnd}
           />
-          <ToggleButton
-            selected={fittingToTheEnd}
-            value={'fittingToTheEnd'}
-            onChange={handleToggleChange}
-          >
-            fitting To The End
-          </ToggleButton>
         </Paper>
       </Container>
     </LoadingBoundary>

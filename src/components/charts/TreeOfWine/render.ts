@@ -13,34 +13,16 @@ export function render(
   onMouseOut: () => void
 ) {
   // TODO: key, join 기능 활용해서 remove 교체하기
-  d3.select(svgRef.current).select('g').remove();
+  d3.select(svgRef.current).selectAll('*').remove();
   const linkRadial = d3
     .linkRadial<d3.HierarchyLink<Tree | WineData>, d3.HierarchyNode<Tree | WineData>>()
     .angle((d) => d.x!)
     .radius((d) => d.y!);
   const r = 3;
   const svg = d3.select(svgRef.current);
-  /** zoom-in/out에 사용될 영역
-   * @var container 회전용 g와 별도로 transform-translate를 적용하기 위해 새로운 g 생성
-   * @var rect zoom-in/out용 영역
-   */
-  const container = svg.append('g').attr('class', 'zoom');
-  /** 회전에 사용될 두 g
-   * @var g.mouse_move mousemove 이벤트때 회전시킬 g
-   * @var g.mouse_up mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 g
-   *
-   * 두 회전은 따로 작동함
-   ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
-   ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
-   *
-   * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
-   * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
-   */
-  const outerG = container.append('g').attr('class', 'mouse-move');
-  const g = outerG.append('g').attr('class', 'mouse-up');
+  const g = svg.append('g').attr('class', 'mouse-up');
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const link = g
+  g // link
     .append('g')
     .attr('fill', 'none')
     .attr('stroke', '#555')
@@ -105,98 +87,18 @@ export function setLayoutAndInteraction(
 ) {
   // set layout and interaction
   const svg = d3.select(svgRef.current);
-  const container = svg.select<SVGGElement>('g.zoom').attr('transform', `translate(50, 0)`);
-  const parent = d3.select(svgRef.current.parentElement);
-  const parentLeft = +parent.style('offsetLeft');
-  const parentTop = +parent.style('offsetTop');
+  svg.select<SVGGElement>('g').attr('transform', `translate(50, 0)`);
 
   const box = svg.select<SVGGElement>('g.node-group').node()!.getBBox();
   if (!sizeRef.current) sizeRef.current = box.width - 100;
   const size = sizeRef.current;
   const halfSize = size / 2;
-  const { PI } = Math;
-  let start: number[] | null = null,
-    rotate = 0;
-
-  const zoom = d3.zoom<any, unknown>().scaleExtent([1, 2]).on('zoom', zoomed);
-
-  svg.call(zoom);
-  // svg.on('mousedown.zoom', null);
 
   svg
-    .attr('width', size)
+    .attr('width', size + 150)
     .attr('height', size)
     .style('box-sizing', 'border-box')
     .style('font', `${fontSize}px sans-serif`);
 
   svg.select('g.mouse-up').attr('transform', `translate(${halfSize}, ${halfSize})`);
-
-  parent.on('mousedown', onMousedown).on('mousemove', onMousemove).on('mouseup', onMouseup);
-
-  // Zoom event handler
-  function zoomed(event: d3.D3ZoomEvent<SVGSVGElement, SVGGElement>) {
-    container.attr('transform', event.transform.toString());
-  }
-
-  // Functions for rotation
-  function onMousedown(e: MouseEvent) {
-    console.log('down');
-    svg.style('cursor', 'move');
-    start = mouse(e);
-    e.preventDefault();
-  }
-
-  function onMousemove(e: MouseEvent) {
-    if (start) {
-      console.log('move');
-      const m = mouse(e);
-      const delta = (Math.atan2(cross(start, m), dot(start, m)) * 180) / PI;
-      svg.select('g.mouse-move').attr('transform', `rotate(${delta}, ${halfSize}, ${halfSize})`);
-    }
-  }
-
-  function onMouseup(e: MouseEvent) {
-    if (start) {
-      console.log('up');
-      svg.style('cursor', 'auto');
-      const m = mouse(e);
-      const delta = (Math.atan2(cross(start, m), dot(start, m)) * 180) / PI;
-      rotate += delta;
-      if (rotate > 360) rotate %= 360;
-      else if (rotate < 0) rotate = (360 + rotate) % 360;
-      start = null;
-      const rotateToRadian = toRadian(rotate);
-      svg.select('g.mouse-move').attr('transform', null);
-      svg
-        .select('g.mouse-up')
-        .attr('transform', `translate(${size / 2}, ${size / 2})rotate(${rotate})`)
-        .selectAll('text')
-        .attr('x', (d: any) =>
-          normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 6 : -6
-        )
-        .attr('text-anchor', (d: any) =>
-          normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 'start' : 'end'
-        )
-        .attr(
-          'transform',
-          (d: any) => 'rotate(' + (normalizeAngle(d.x! + rotateToRadian) < PI ? 0 : 180) + ')'
-        );
-    }
-  }
-
-  function cross(a: number[], b: number[]) {
-    return a[0] * b[1] - a[1] * b[0];
-  }
-  function dot(a: number[], b: number[]) {
-    return a[0] * b[0] + a[1] * b[1];
-  }
-  function mouse({ pageX, pageY }: MouseEvent) {
-    return [pageX - parentLeft - halfSize, pageY - parentTop - halfSize];
-  }
-  function toRadian(rotate: number) {
-    return (rotate * PI) / 180;
-  }
-  function normalizeAngle(angle: number) {
-    return angle % (2 * PI);
-  }
 }

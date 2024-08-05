@@ -2,6 +2,7 @@
 import * as d3 from 'd3';
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
+import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
 import { render, setLayoutAndInteraction } from './render';
 
@@ -24,7 +25,8 @@ export default function RadialDendrogram(props: RadialDendrogramProps) {
         x={tooltipCoords.x}
         y={tooltipCoords.y}
       />
-      <svg ref={svgRef}></svg>
+      <svg style={{ gridRow: '2 / 3', gridColumn: '1 / 2' }} ref={svgRef}></svg>
+      <RotateSlider svgRef={svgRef} />
     </>
   );
 }
@@ -37,18 +39,18 @@ function useRenderChart({
   fittingToTheEnd,
 }: RadialDendrogramProps) {
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
-  const size = useRef(0);
+  const sizeRef = useRef(0);
   const radius = width / 2;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
   const { nodeData, linkData, color, getCountry } = useChartData(fittingToTheEnd, data, radius);
 
   useEffect(() => {
     render(svgRef, columns, nodeData, linkData, color, getCountry, onMouseOver, onMouseOut);
-    setLayoutAndInteraction(svgRef, size, fontSize);
+    setLayoutAndInteraction(svgRef, sizeRef, fontSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
-  return { svgRef, tooltipContent, tooltipVisible, tooltipCoords };
+  return { svgRef, sizeRef, tooltipContent, tooltipVisible, tooltipCoords };
 }
 
 function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: number) {
@@ -73,7 +75,7 @@ function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: n
     const linkData = tree.links();
 
     return { nodeData, linkData };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
   /** Country 색 매핑 함수 */
