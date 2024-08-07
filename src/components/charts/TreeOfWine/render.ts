@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import * as d3fisheye from 'd3-fisheye';
 import { MutableRefObject } from 'react';
 import { Tree, WineData, isChildrenTree } from '../../../utils/makeTree';
 
@@ -20,22 +21,24 @@ export function render(
     .radius((d) => d.y!);
   const r = 3;
   const svg = d3.select(svgRef.current);
-    /** 회전에 사용될 두 g
-   * @var g.mouse_move mousemove 이벤트때 회전시킬 g
-   * @var g.mouse_up mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 g
-   *
-   * 두 회전은 따로 작동함
-   ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
-   ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
-   *
-   * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
-   * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
-   */
-   const outerG = svg.append('g').attr('class', 'mouse-move');
-   const g = outerG.append('g').attr('class', 'mouse-up');
+  /** 회전에 사용될 두 g
+ * @var g.mouse_move mousemove 이벤트때 회전시킬 g
+ * @var g.mouse_up mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 g
+ *
+ * 두 회전은 따로 작동함
+ ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
+ ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
+ *
+ * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
+ * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
+ */
+  const outerG = svg.append('g').attr('class', 'mouse-move');
+  outerG.append("rect").attr('width', 1100).attr('height', 900).attr('fill', 'white')
+  const g = outerG.append('g').attr('class', 'mouse-up');
 
-  g // link
+  const link = g // link
     .append('g')
+    .attr('class', 'link-group')
     .attr('fill', 'none')
     .attr('stroke', '#555')
     .attr('stroke-opacity', 0.4)
@@ -53,6 +56,7 @@ export function render(
     .selectAll('g')
     .data(nodeData)
     .join('g')
+    .attr('class', 'nodes')
     .attr('transform', (d) => `rotate(${(d.x! * 180) / Math.PI - 90}) translate(${d.y},0)`);
 
   node
@@ -113,4 +117,43 @@ export function setLayoutAndInteraction(
     .style('font', `${fontSize}px sans-serif`);
 
   svg.select('g.mouse-up').attr('transform', `translate(${halfSize}, ${halfSize})`);
+
+  const fisheye = d3fisheye.circular().radius(200).smoothing(0.2).distortion(3);
+  const node = svg.selectAll('g.nodes')
+  const link = svg.select('g.link-group').selectAll('path')
+  // const linkRadial = d3
+  //   .linkRadial<d3.HierarchyLink<Tree | WineData>, d3.HierarchyNode<Tree | WineData>>()
+  //   .angle((d) => d.fisheye[0])
+  //   .radius((d) => {
+  //     const [x, y] = d.fisheye;
+  //     return Math.sqrt(x * x + y * y)
+  //   });
+  svg.on('mousemove', (event) => {
+    const points = d3.pointer(event);
+    points[0] -= (size + 150) / 2;
+    points[1] -= halfSize;
+    fisheye.focus(points);
+    node
+      .each(function (d: any) {
+        d.fisheye = fisheye([d.y! * Math.cos(d.x! - Math.PI / 2), d.y! * Math.sin(d.x! - Math.PI / 2)]);
+      })
+      .attr('transform', function (d) {
+        const [x, y] = d.fisheye;
+        const This = d3.select(this);
+        const findIndex = This.attr('transform').indexOf("tr");
+        const rotate = This.attr('transform').slice(0, findIndex);
+        const radius = Math.sqrt(x * x + y * y);
+        return `${rotate} translate(${radius},0)`;
+      });
+    node.selectAll('circle')
+      .attr('r', (d: any) => {
+        const [, , z] = d.fisheye;
+        return z * 4
+      });
+
+    // link
+    //   .attr('d', d => {
+    //     return linkRadial(d)
+    //   })
+  });
 }
