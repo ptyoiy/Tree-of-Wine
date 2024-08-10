@@ -4,6 +4,7 @@ import { RadialDendrogram } from './components/charts/TreeOfWine';
 import { LoadingBoundary } from './components/layout/LoadingBoundary';
 import { useWineDataCsv } from './utils/csvHandler';
 import { makeTree, WineData } from './utils/makeTree';
+import {SideBar} from "./components/layout/SideBar.tsx";
 
 /**
  * Tree of Wine의 분기 순서
@@ -20,7 +21,12 @@ function App() {
   const { data, fittingToTheEnd, handleToggleChange } = useData(csvData);
   return (
     <LoadingBoundary isLoading={isLoading}>
-      <Container>
+      <Container
+          maxWidth="xl"
+          sx={{
+          display:'flex',
+      }}>
+          <SideBar/>
         <Paper
           elevation={5}
           sx={{
@@ -33,7 +39,8 @@ function App() {
           }}
         >
           <ToggleButton
-            sx={{ position: 'relative', right: 0, gridRow: '1 / 2', gridColumn: '2 / 3' }}
+            sx={{ position: 'relative', right: 0, gridRow: '1 / 2', gridColumn: '2 / 3', justifySelf: 'center',
+                alignSelf: 'center',  }}
             selected={fittingToTheEnd}
             value={'fittingToTheEnd'}
             onChange={handleToggleChange}
