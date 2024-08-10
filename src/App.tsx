@@ -14,7 +14,6 @@ import {SideBar} from "./components/layout/SideBar.tsx";
  * 위 상황에서 만약 분기 도중 EstateDate 속성의 값이 없을 경우
  * Country, Region, Designation 3단계로 분기됨
  */
-
 const columns: (keyof WineData)[] = ['Country', 'Region', 'Designation'];
 
 function App() {

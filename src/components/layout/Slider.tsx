@@ -99,7 +99,6 @@ export default function RotateSlider({
   );
 }
 
-
 const GrabButtonSlider = styled(Slider)(() => ({
   height: '300px',
   '& .MuiSlider-thumb': {
