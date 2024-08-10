@@ -46,6 +46,7 @@ export const SideBar= () => {
         </Box>
     );
 
+
     return (
         <Box>
             <MenuIcon
