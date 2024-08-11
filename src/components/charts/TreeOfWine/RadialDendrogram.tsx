@@ -42,10 +42,10 @@ function useRenderChart({
   const sizeRef = useRef(0);
   const radius = width / 2;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
-  const { nodeData, linkData, color, getCountry } = useChartData(fittingToTheEnd, data, radius);
+  const { nodeData, linkData, getCountry } = useChartData(fittingToTheEnd, data, radius);
 
   useEffect(() => {
-    render(svgRef, columns, nodeData, linkData, color, getCountry, onMouseOver, onMouseOut);
+    render(svgRef, columns, nodeData, linkData, getCountry, onMouseOver, onMouseOut);
     setLayoutAndInteraction(svgRef, sizeRef, fontSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
@@ -78,16 +78,6 @@ function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: n
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
-  /** Country 색 매핑 함수 */
-  const color = useMemo(
-    () =>
-      d3
-        .scaleOrdinal<string>()
-        .domain(['France', 'Spain', 'Italy'])
-        .range(['#0055A4', '#FFD700', '#008C45']),
-    []
-  );
-
   /** node의 Country를 찾아 반환하는 함수
    * @variation depth 0 ~ n
    */
@@ -105,5 +95,5 @@ function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: n
     }
   }, []);
 
-  return { nodeData, linkData, color, getCountry };
+  return { nodeData, linkData, getCountry };
 }

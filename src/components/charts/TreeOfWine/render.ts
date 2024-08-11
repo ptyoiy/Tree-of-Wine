@@ -1,13 +1,12 @@
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import { Tree, WineData, isChildrenTree } from '../../../utils/makeTree';
+import { Tree, WineData, color, isChildrenTree } from '../../../utils/makeTree';
 
 export function render(
   svgRef: MutableRefObject<SVGSVGElement>,
   columns: (keyof WineData)[],
   nodeData: d3.HierarchyNode<Tree | WineData>[],
   linkData: d3.HierarchyLink<Tree | WineData>[],
-  color: d3.ScaleOrdinal<string, string, never>,
   getCountry: (d: d3.HierarchyNode<Tree | WineData>) => string,
   onMouseOver: (e: MouseEvent, d: WineData) => void,
   onMouseOut: () => void

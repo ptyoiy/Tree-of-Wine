@@ -1,36 +1,30 @@
-import { Box } from '@mui/material';
+import { Box, Paper } from '@mui/material';
+import { Tree } from '../../utils/makeTree';
+import { BubbleChart } from '../charts/bubble';
 
-const RightSection = () => {
-    return (
-        <Box
-            sx={{
-                display: 'grid',
-                gridTemplateRows: '1fr 1fr 1fr',
-                height: '100vh',
-                width: '350px',
-                border: 'solid 1px black',
-            }}
-        >
-            <Box
-                sx={{
+type SectionProps = {
+  data: Tree;
+};
 
-                    borderBottom: 'solid 1px black',
-                }}
-            >
-                Bubble Chart
-            </Box>
-            <Box
-                sx={{
-                    borderBottom: 'solid 1px black',
-                }}
-            >
-                Select Statistic Info Chart
-            </Box>
-            <Box >
-                Mini-Map
-            </Box>
-        </Box>
-    );
+const RightSection = ({ data }: SectionProps) => {
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateRows: '1fr 1fr 1fr',
+        height: '100vh',
+        width: '350px',
+        border: 'solid 1px black',
+        gap: '1px',
+      }}
+    >
+      <Paper sx={{}}>
+        <BubbleChart data={data} />
+      </Paper>
+      <Paper sx={{}}>Select Statistic Info Chart</Paper>
+      <Paper>Mini-Map</Paper>
+    </Box>
+  );
 };
 
 export default RightSection;
