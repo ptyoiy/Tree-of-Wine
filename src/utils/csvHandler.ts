@@ -5,7 +5,6 @@ import { WineData } from './makeTree';
 export function useWineDataCsv() {
   const [data, setData] = useState<WineData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const fetchCsv = async () => {
       try {
@@ -18,6 +17,7 @@ export function useWineDataCsv() {
         setData(parsedData);
         setIsLoading(false);
       } catch (e) {
+        console.log({ e });
         throw { e };
       }
     };
@@ -27,6 +27,9 @@ export function useWineDataCsv() {
       return result.data;
     };
     fetchCsv();
+    setTimeout(() => {
+      throw 'handler';
+    });
   }, []);
 
   return { data, isLoading };
