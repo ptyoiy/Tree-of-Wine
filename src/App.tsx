@@ -5,6 +5,7 @@ import { LoadingBoundary } from './components/layout/LoadingBoundary';
 import { useWineDataCsv } from './utils/csvHandler';
 import { makeTree, WineData } from './utils/makeTree';
 import {SideBar} from "./components/layout/SideBar.tsx";
+import RightSection from "./components/layout/RightSection.tsx";
 
 /**
  * Tree of Wine의 분기 순서
@@ -22,11 +23,13 @@ function App() {
   return (
     <LoadingBoundary isLoading={isLoading}>
       <Container
-          maxWidth="xl"
+          maxWidth={false}
           sx={{
           display:'flex',
       }}>
           <SideBar/>
+
+
         <Paper
           elevation={5}
           sx={{
@@ -55,6 +58,7 @@ function App() {
             fittingToTheEnd={fittingToTheEnd}
           />
         </Paper>
+          <RightSection/>
       </Container>
     </LoadingBoundary>
   );
