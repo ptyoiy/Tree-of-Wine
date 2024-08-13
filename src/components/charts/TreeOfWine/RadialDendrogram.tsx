@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as d3 from 'd3';
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Tree, WineData } from '../../../utils/makeTree';
+import { Tree, WineData, makeTree } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
 import { render, setLayoutAndInteraction } from './render';
@@ -9,14 +9,13 @@ import { render, setLayoutAndInteraction } from './render';
 type RadialDendrogramProps = {
   width: number;
   fontSize: number;
-  data: Tree | WineData;
+  data: WineData[];
   columns: (keyof WineData)[];
   fittingToTheEnd: boolean;
 };
 
 export default function RadialDendrogram(props: RadialDendrogramProps) {
   const { svgRef, tooltipContent, tooltipVisible, tooltipCoords } = useRenderChart(props);
-
   return (
     <>
       <Tooltip
@@ -42,7 +41,7 @@ function useRenderChart({
   const sizeRef = useRef(0);
   const radius = width / 2;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
-  const { nodeData, linkData, getCountry } = useChartData(fittingToTheEnd, data, radius);
+  const { nodeData, linkData, getCountry } = useChartData(fittingToTheEnd, data, columns, radius);
 
   useEffect(() => {
     render(svgRef, columns, nodeData, linkData, getCountry, onMouseOver, onMouseOut);
@@ -53,18 +52,20 @@ function useRenderChart({
   return { svgRef, sizeRef, tooltipContent, tooltipVisible, tooltipCoords };
 }
 
-function useChartData(fittingToTheEnd: boolean, data: Tree | WineData, radius: number) {
+function useChartData(fittingToTheEnd: boolean, data: WineData[], columns: (keyof WineData)[], radius: number) {
+
   /** Tree data 생성
    * @param fittingToTheEnd 값에 따라 layout만 다른 동일한 tree 데이터 생성
    */
+  const treeData = useMemo(() => makeTree(data, ...columns) as Tree | WineData, [columns, data]);
   const { nodeData, linkData } = useMemo(() => {
     let tree: d3.HierarchyNode<Tree | WineData>;
     if (fittingToTheEnd) {
       const treeConstructor = d3.cluster<Tree | WineData>().size([2 * Math.PI, radius - 100]);
-      const hierarchy = d3.hierarchy(data).sort((a, b) => a.height - b.height);
+      const hierarchy = d3.hierarchy(treeData).sort((a, b) => a.height - b.height);
       tree = treeConstructor(hierarchy);
     } else {
-      tree = d3.hierarchy(data).sort((a, b) => a.height - b.height);
+      tree = d3.hierarchy(treeData).sort((a, b) => a.height - b.height);
       d3
         .tree<Tree | WineData>()
         .size([2 * Math.PI, radius - 100])

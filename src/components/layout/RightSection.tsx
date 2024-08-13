@@ -1,12 +1,13 @@
 import { Box, Paper } from '@mui/material';
-import { Tree } from '../../utils/makeTree';
+import { WineData } from '../../utils/makeTree';
 import { BubbleChart } from '../charts/bubble';
 
 type SectionProps = {
-  data: Tree;
+  data: WineData[];
+  columns: (keyof WineData)[];
 };
 
-const RightSection = ({ data }: SectionProps) => {
+const RightSection = ({ data, columns }: SectionProps) => {
   return (
     <Box
       sx={{
@@ -19,7 +20,7 @@ const RightSection = ({ data }: SectionProps) => {
       }}
     >
       <Paper sx={{}}>
-        <BubbleChart data={data} />
+        <BubbleChart data={data} columns={columns} />
       </Paper>
       <Paper sx={{}}>Select Statistic Info Chart</Paper>
       <Paper>Mini-Map</Paper>

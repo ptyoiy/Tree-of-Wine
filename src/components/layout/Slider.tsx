@@ -34,7 +34,7 @@ export default function RotateSlider({
     svgSelectionRef.current
       ?.select('g.mouse-move')
       .attr('transform', `translate(50, 0)rotate(${value - 90}, ${halfSize}, ${halfSize})`);
-
+      
     setSliderValue(value);
   }, []);
 

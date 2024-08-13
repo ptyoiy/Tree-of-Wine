@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import * as d3 from 'd3';
 
 export type WineData = {
   Appellation: string;
@@ -25,6 +25,7 @@ export function isChildrenTree(value: Tree | WineData): value is Tree {
 }
 
 export function makeTree(csvData: WineData[], ...columns: (keyof WineData)[]): Tree {
+  console.log({ csvData });
   return buildTree(csvData, columns);
 }
 
