@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as d3 from 'd3';
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Tree, WineData, makeTree } from '../../../utils/makeTree';
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
+import { Tree, WineData } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
 import { render, setLayoutAndInteraction } from './render';
@@ -9,8 +9,7 @@ import { render, setLayoutAndInteraction } from './render';
 type RadialDendrogramProps = {
   width: number;
   fontSize: number;
-  data: WineData[];
-  columns: (keyof WineData)[];
+  data: WineData | Tree;
   fittingToTheEnd: boolean;
 };
 
@@ -34,17 +33,16 @@ function useRenderChart({
   width,
   data,
   fontSize,
-  columns,
   fittingToTheEnd,
 }: RadialDendrogramProps) {
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
   const sizeRef = useRef(0);
   const radius = width / 2;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
-  const { nodeData, linkData, getCountry } = useChartData(fittingToTheEnd, data, columns, radius);
+  const { nodeData, linkData } = useChartData(fittingToTheEnd, data, radius);
 
   useEffect(() => {
-    render(svgRef, columns, nodeData, linkData, getCountry, onMouseOver, onMouseOut);
+    render(svgRef, nodeData, linkData, onMouseOver, onMouseOut);
     setLayoutAndInteraction(svgRef, sizeRef, fontSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
@@ -52,12 +50,10 @@ function useRenderChart({
   return { svgRef, sizeRef, tooltipContent, tooltipVisible, tooltipCoords };
 }
 
-function useChartData(fittingToTheEnd: boolean, data: WineData[], columns: (keyof WineData)[], radius: number) {
-
+function useChartData(fittingToTheEnd: boolean, treeData: WineData | Tree, radius: number) {
   /** Tree data 생성
    * @param fittingToTheEnd 값에 따라 layout만 다른 동일한 tree 데이터 생성
    */
-  const treeData = useMemo(() => makeTree(data, ...columns) as Tree | WineData, [columns, data]);
   const { nodeData, linkData } = useMemo(() => {
     let tree: d3.HierarchyNode<Tree | WineData>;
     if (fittingToTheEnd) {
@@ -79,22 +75,5 @@ function useChartData(fittingToTheEnd: boolean, data: WineData[], columns: (keyo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
-  /** node의 Country를 찾아 반환하는 함수
-   * @variation depth 0 ~ n
-   */
-  const getCountry = useCallback((d: d3.HierarchyNode<Tree | WineData>) => {
-    const { depth, data } = d;
-    // 말단 노드일 때
-    if ('Country' in data) return data.Country;
-    // 중간 노드일 때
-    if (depth === 1) return data.name;
-    else {
-      // 2 ~ n-1 depth의 노드면 depth 1을 찾아감
-      // eslint-disable-next-line no-var
-      for (var current = d; current.depth !== 1; current = current.parent!);
-      return (current?.data as Tree).name;
-    }
-  }, []);
-
-  return { nodeData, linkData, getCountry };
+  return { nodeData, linkData };
 }

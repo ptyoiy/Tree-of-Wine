@@ -1,13 +1,12 @@
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import { Tree, WineData, color, isChildrenTree } from '../../../utils/makeTree';
+import { color, getCountryAtTreeOfWine } from '../../../utils/chartUtils';
+import { Tree, WineData, isChildrenTree } from '../../../utils/makeTree';
 
 export function render(
   svgRef: MutableRefObject<SVGSVGElement>,
-  columns: (keyof WineData)[],
   nodeData: d3.HierarchyNode<Tree | WineData>[],
   linkData: d3.HierarchyLink<Tree | WineData>[],
-  getCountry: (d: d3.HierarchyNode<Tree | WineData>) => string,
   onMouseOver: (e: MouseEvent, d: WineData) => void,
   onMouseOut: () => void
 ) {
@@ -57,9 +56,9 @@ export function render(
   node
     .append('circle')
     .attr('cursor', 'pointer')
-    .attr('fill', (d) => (d.depth === 0 ? '#555' : color(getCountry(d))))
+    .attr('fill', (d) => (d.depth === 0 ? '#555' : color(getCountryAtTreeOfWine(d))))
     .attr('r', r)
-    .on('mouseover', (e, d) => {
+    .on('mousemove', (e, d) => {
       if ('Country' in d.data) onMouseOver(e, d.data);
     })
     .on('mouseout', (_e, d) => {
@@ -72,7 +71,7 @@ export function render(
     .attr('x', (d) => (d.x! < Math.PI === !d.children ? 6 : -6))
     .attr('text-anchor', (d) => (d.x! < Math.PI === !d.children ? 'start' : 'end'))
     .attr('transform', (d) => (d.x! >= Math.PI ? 'rotate(180)' : null))
-    .on('mouseover', (e, d) => {
+    .on('mousemove', (e, d) => {
       if ('Country' in d.data) onMouseOver(e, d.data);
     })
     .on('mouseout', (_e, d) => {
@@ -82,7 +81,7 @@ export function render(
       if (isChildrenTree(d.data)) {
         return d.data.name;
       } else {
-        return d.data[columns.at(-1)!];
+        return d.data.Designation;
       }
     })
     .filter((d) => isChildrenTree(d.data))

@@ -1,5 +1,3 @@
-import * as d3 from 'd3';
-
 export type WineData = {
   Appellation: string;
   Country: string;
@@ -15,16 +13,11 @@ export type Tree = {
   children: Array<Tree | WineData>;
 };
 
-export const color = d3
-  .scaleOrdinal<string>()
-  .domain(['France', 'Spain', 'Italy'])
-  .range(['#0055A4', '#FFD700', '#008C45']);
-
 export function isChildrenTree(value: Tree | WineData): value is Tree {
   return 'name' in value;
 }
 
-export function makeTree(csvData: WineData[], ...columns: (keyof WineData)[]): Tree {
+export function makeTree(csvData: WineData[], ...columns: (keyof WineData)[]): Tree | WineData {
   console.log({ csvData });
   return buildTree(csvData, columns);
 }

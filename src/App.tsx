@@ -1,11 +1,11 @@
 import { Container, Paper, ToggleButton } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { RadialDendrogram } from './components/charts/TreeOfWine';
 import { LoadingBoundary } from './components/layout/LoadingBoundary';
 import RightSection from './components/layout/RightSection.tsx';
 import { SideBar } from './components/layout/SideBar.tsx';
 import { useWineDataCsv } from './utils/csvHandler';
-import { WineData } from './utils/makeTree';
+import { makeTree, WineData } from './utils/makeTree';
 
 /**
  * Tree of Wine의 분기 순서
@@ -19,7 +19,7 @@ const columns: (keyof WineData)[] = ['Country', 'Region', 'Designation'];
 
 function App() {
   const { data: csvData, isLoading } = useWineDataCsv();
-  const { fittingToTheEnd, handleToggleChange } = useData();
+  const { treeData, fittingToTheEnd, handleToggleChange } = useData(csvData);
   return (
     <LoadingBoundary isLoading={isLoading}>
       <Container
@@ -58,21 +58,21 @@ function App() {
           <RadialDendrogram
             width={800}
             fontSize={9.5}
-            data={csvData}
-            columns={columns}
+            data={treeData}
             fittingToTheEnd={fittingToTheEnd}
           />
         </Paper>
-        <RightSection data={csvData} columns={columns} />
+        <RightSection data={treeData} />
       </Container>
     </LoadingBoundary>
   );
 }
 
-function useData() {
+function useData(csvData: WineData[]) {
   const [fittingToTheEnd, setFittingToTheEnd] = useState(false);
   const handleToggleChange = () => setFittingToTheEnd(!fittingToTheEnd);
-  return { fittingToTheEnd, handleToggleChange };
+  const treeData = useMemo(() => makeTree(csvData, ...columns), [csvData]);
+  return { treeData, fittingToTheEnd, handleToggleChange };
 }
 
 export default App;
