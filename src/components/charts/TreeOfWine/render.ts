@@ -10,44 +10,19 @@ export function render(
   onMouseOver: (e: MouseEvent, d: WineData) => void,
   onMouseOut: () => void
 ) {
-  // TODO: key, join 기능 활용해서 remove 교체하기
-  d3.select(svgRef.current).selectAll('*').remove();
   const linkRadial = d3
     .linkRadial<d3.HierarchyLink<Tree | WineData>, d3.HierarchyNode<Tree | WineData>>()
     .angle((d) => d.x!)
     .radius((d) => d.y!);
   const r = 3;
   const svg = d3.select(svgRef.current);
-    /** 회전에 사용될 두 g
-   * @var g.mouse_move mousemove 이벤트때 회전시킬 g
-   * @var g.mouse_up mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 g
-   *
-   * 두 회전은 따로 작동함
-   ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
-   ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
-   *
-   * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
-   * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
-   */
-   const outerG = svg.append('g').attr('class', 'mouse-move');
-   const g = outerG.append('g').attr('class', 'mouse-up');
+  const g = svg.select('g.mouse-up');
+  const linkGroup = g.select('g.link-group');
+  const nodeGroup = g.select('g.node-group');
 
-  g // link
-    .append('g')
-    .attr('fill', 'none')
-    .attr('stroke', '#555')
-    .attr('stroke-opacity', 0.4)
-    .attr('stroke-width', 1.5)
-    .selectAll('path')
-    .data(linkData)
-    .join('path')
-    .attr('d', linkRadial);
+  linkGroup.selectAll('path').data(linkData).join('path').attr('d', linkRadial);
 
-  const node = g
-    .append('g')
-    .attr('class', 'node-group')
-    .attr('stroke-linejoin', 'round')
-    .attr('stroke-width', 3)
+  const node = nodeGroup
     .selectAll('g')
     .data(nodeData)
     .join('g')
@@ -90,25 +65,54 @@ export function render(
     .attr('stroke', 'white');
 }
 
-export function setLayoutAndInteraction(
+export function setLayout(
   svgRef: MutableRefObject<SVGSVGElement>,
   sizeRef: MutableRefObject<number>,
   fontSize: number
 ) {
-  // set layout and interaction
-  const svg = d3.select(svgRef.current);
-  svg.select<SVGGElement>('g').attr('transform', `translate(50, 0)`);
-
-  const box = svg.select<SVGGElement>('g.node-group').node()!.getBBox();
-  if (!sizeRef.current) sizeRef.current = box.width - 100;
+  const parent = svgRef.current.parentElement;
+  if (!sizeRef.current) sizeRef.current = parent!.clientWidth - 100;
+  console.log(parent, parent?.clientWidth);
   const size = sizeRef.current;
   const halfSize = size / 2;
+  const svg = d3.select(svgRef.current);
 
   svg
     .attr('width', size + 150)
     .attr('height', size)
     .style('box-sizing', 'border-box')
     .style('font', `${fontSize}px sans-serif`);
+  // set layout and interaction
+  // TODO: key, join 기능 활용해서 remove 교체하기
+  d3.select(svgRef.current).selectAll('*').remove();
+  /** 회전에 사용될 두 g
+   * @var g.mouse_move mousemove 이벤트때 회전시킬 g
+   * @var g.mouse_up mouseup 이벤트때 회전량을 증분 및 360도로 정규화 하면서 회전시킬 g
+   *
+   * 두 회전은 따로 작동함
+   ** move일땐 g.mouse-move만 단독으로 증분 없이 회전시킴
+   ** up일땐 g.mouse-up만 단독으로 증분 및 정규화하며 회전시킴
+   *
+   * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
+   * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
+   */
+  const outerG = svg
+    .append('g')
+    .attr('class', 'mouse-move')
+    .attr('transform', `translate(50, -100)`);
+  const g = outerG
+    .append('g')
+    .attr('class', 'mouse-up')
+    .attr('transform', `translate(${halfSize}, ${halfSize})`);
+  g.append('g') // link
+    .attr('class', 'link-group')
+    .attr('fill', 'none')
+    .attr('stroke', '#555')
+    .attr('stroke-opacity', 0.4)
+    .attr('stroke-width', 1.5);
 
-  svg.select('g.mouse-up').attr('transform', `translate(${halfSize}, ${halfSize})`);
+  g.append('g') // node
+    .attr('class', 'node-group')
+    .attr('stroke-linejoin', 'round')
+    .attr('stroke-width', 3);
 }

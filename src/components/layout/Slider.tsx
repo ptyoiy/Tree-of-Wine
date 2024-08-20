@@ -33,7 +33,7 @@ export default function RotateSlider({
     const halfSize = sizeRef.current / 2;
     svgSelectionRef.current
       ?.select('g.mouse-move')
-      .attr('transform', `translate(50, 0)rotate(${value - 90}, ${halfSize}, ${halfSize})`);
+      .attr('transform', `translate(50, -100)rotate(${value - 90}, ${halfSize}, ${halfSize})`);
       
     setSliderValue(value);
   }, []);
@@ -51,7 +51,7 @@ export default function RotateSlider({
 
     svg
       .select('g.mouse-move')
-      .attr('transform', `translate(50, 0)`);
+      .attr('transform', `translate(50, -100)`);
     svg
       .select('g.mouse-up')
       .attr('transform', `translate(${halfSize}, ${halfSize})rotate(${rotate})`)

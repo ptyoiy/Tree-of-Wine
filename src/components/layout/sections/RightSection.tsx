@@ -13,6 +13,7 @@ const RightSection = ({ data }: SectionProps) => {
         display: 'grid',
         gridTemplateRows: '1fr 1fr 1fr',
         border: 'solid 1px black',
+        width: '20%',
         gap: '1px',
       }}
     >

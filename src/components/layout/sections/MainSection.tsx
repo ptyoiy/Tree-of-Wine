@@ -15,10 +15,9 @@ export default function MainSection({ data }: MainSectionProps) {
       elevation={5}
       sx={{
         display: 'grid',
-        gridTemplateRows: '50px auto',
-        gridTemplateColumns: 'auto 150px',
-        width: 'fit-content',
-        height: '100vh',
+        gridTemplateRows: '10% auto',
+        gridTemplateColumns: '90% auto',
+        width: '60%',
         overflow: 'hidden',
       }}
     >
@@ -38,7 +37,7 @@ export default function MainSection({ data }: MainSectionProps) {
         fitting To The End
       </ToggleButton>
       <RadialDendrogram
-        width={800}
+        width={650}
         fontSize={9.5}
         data={data}
         fittingToTheEnd={fittingToTheEnd}

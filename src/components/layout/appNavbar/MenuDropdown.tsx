@@ -41,7 +41,7 @@ export default function MenuDropdown() {
         onClose={handleClose}
       >
         {menuItems.map((item) => (
-          <MenuItem onClick={handleClose}>{item.text}</MenuItem>
+          <MenuItem key={item.text} onClick={handleClose}>{item.text}</MenuItem>
         ))}
       </Menu>
     </>

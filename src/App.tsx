@@ -23,9 +23,10 @@ function App() {
     <LoadingBoundary isLoading={isLoading}>
       <AppNavbar />
       <Container
-        maxWidth="xl"
+        maxWidth={false}
         sx={{
-          display: '-webkit-box',
+          display: 'flex',
+          justifyContent: 'center',
           height: '100vh',
           margin: '0',
         }}

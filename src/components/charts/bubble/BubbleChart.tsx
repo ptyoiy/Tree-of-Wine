@@ -19,13 +19,11 @@ export default function BubbleChart(props: BubbleChartProps) {
   } = useRenderChart(props);
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ position: 'absolute', transform: 'translateX(235px)' }}
-        ref={btnRef}
-      >
-        ↑
-      </Button>
+      <div style={{ position: 'relative', float: 'right', zIndex: 999 }}>
+        <Button variant="contained" ref={btnRef}>
+          ↑
+        </Button>
+      </div>
       <svg ref={svgRef}></svg>
       <Tooltip content={tooltipContent} visible={tooltipVisible} x={x} y={y} />
     </>

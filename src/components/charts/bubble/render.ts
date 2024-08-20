@@ -13,6 +13,7 @@ export function setLayout(svgRef: MutableRefObject<SVGSVGElement>, pack: d3.Pack
   pack.size([width - margin * 2, height - margin * 2]);
 
   svg
+    .style('position', 'absolute')
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', [-margin, -margin, width, height])

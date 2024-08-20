@@ -1,7 +1,7 @@
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import MenuDropdown from './Menu';
+import MenuDropdown from './MenuDropdown';
 import NavbarTitle from './NavbarTitle';
 
 export default function AppNavbar() {

@@ -4,7 +4,7 @@ import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
-import { render, setLayoutAndInteraction } from './render';
+import { render, setLayout } from './render';
 
 type RadialDendrogramProps = {
   width: number;
@@ -42,8 +42,8 @@ function useRenderChart({
   const { nodeData, linkData } = useChartData(fittingToTheEnd, data, radius);
 
   useEffect(() => {
+    setLayout(svgRef, sizeRef, fontSize);
     render(svgRef, nodeData, linkData, onMouseOver, onMouseOut);
-    setLayoutAndInteraction(svgRef, sizeRef, fontSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
