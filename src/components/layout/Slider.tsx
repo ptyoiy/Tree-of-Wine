@@ -10,6 +10,7 @@ import {
   preventHorizontalKeyboardNavigation,
   toRadian,
 } from '../../utils/sliderUtils';
+import { mainChartTransform } from '../charts/TreeOfWine/constant';
 
 export default function RotateSlider({
   svgRef,
@@ -33,41 +34,44 @@ export default function RotateSlider({
     const halfSize = sizeRef.current / 2;
     svgSelectionRef.current
       ?.select('g.mouse-move')
-      .attr('transform', `translate(50, -100)rotate(${value - 90}, ${halfSize}, ${halfSize})`);
-      
+      .attr('transform', `${mainChartTransform}rotate(${value - 90}, ${halfSize}, ${halfSize})`);
+
     setSliderValue(value);
   }, []);
 
   /** 오래 걸리는 작업은 onChange 종료 후 호출 */
-  const onChangeCommittedHandler = React.useCallback((value: number) => {
-    const svg = svgSelectionRef.current!;
-    const halfSize = sizeRef.current / 2;
-    let rotate = rotateValue;
-    rotate += value - 90;
-    // rotate %= 360;
-    if (rotate > 360) rotate %= 360;
-    else if (rotate < 0) rotate = (360 + rotate) % 360;
-    const rotateToRadian = toRadian(rotate);
+  const onChangeCommittedHandler = React.useCallback(
+    (value: number) => {
+      const svg = svgSelectionRef.current!;
+      const halfSize = sizeRef.current / 2;
+      let rotate = rotateValue;
+      rotate += value - 90;
+      // rotate %= 360;
+      if (rotate > 360) rotate %= 360;
+      else if (rotate < 0) rotate = (360 + rotate) % 360;
+      const rotateToRadian = toRadian(rotate);
 
-    svg
-      .select('g.mouse-move')
-      .attr('transform', `translate(50, -100)`);
-    svg
-      .select('g.mouse-up')
-      .attr('transform', `translate(${halfSize}, ${halfSize})rotate(${rotate})`)
-      .selectAll('text')
-      .attr('x', (d: any) => (normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 6 : -6))
-      .attr('text-anchor', (d: any) =>
-        normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 'start' : 'end'
-      )
-      .attr(
-        'transform',
-        (d: any) => 'rotate(' + (normalizeAngle(d.x! + rotateToRadian) < PI ? 0 : 180) + ')'
-      );
+      svg.select('g.mouse-move').attr('transform', `${mainChartTransform}`);
+      svg
+        .select('g.mouse-up')
+        .attr('transform', `translate(${halfSize}, ${halfSize})rotate(${rotate})`)
+        .selectAll('text')
+        .attr('x', (d: any) =>
+          normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 6 : -6
+        )
+        .attr('text-anchor', (d: any) =>
+          normalizeAngle(d.x! + rotateToRadian) < PI === !d.children ? 'start' : 'end'
+        )
+        .attr(
+          'transform',
+          (d: any) => 'rotate(' + (normalizeAngle(d.x! + rotateToRadian) < PI ? 0 : 180) + ')'
+        );
 
-    setSliderValue(90);
-    setRotateValue(rotate);
-  }, [rotateValue]);
+      setSliderValue(90);
+      setRotateValue(rotate);
+    },
+    [rotateValue]
+  );
 
   return (
     <Box
@@ -75,6 +79,7 @@ export default function RotateSlider({
         gridRow: '2 / 3',
         gridColumn: '2 / 3',
         alignSelf: 'center',
+        transform: 'translate(0, -15%)',
       }}
     >
       <GrabButtonSlider

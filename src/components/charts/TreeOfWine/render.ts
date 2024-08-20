@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
 import { color, getCountryAtTreeOfWine } from '../../../utils/chartUtils';
 import { Tree, WineData, isChildrenTree } from '../../../utils/makeTree';
+import { mainChartTransform } from './constant';
 
 export function render(
   svgRef: MutableRefObject<SVGSVGElement>,
@@ -80,6 +81,7 @@ export function setLayout(
   svg
     .attr('width', size + 150)
     .attr('height', size)
+    .style('position', 'absolute')
     .style('box-sizing', 'border-box')
     .style('font', `${fontSize}px sans-serif`);
   // set layout and interaction
@@ -99,7 +101,7 @@ export function setLayout(
   const outerG = svg
     .append('g')
     .attr('class', 'mouse-move')
-    .attr('transform', `translate(50, -100)`);
+    .attr('transform', mainChartTransform);
   const g = outerG
     .append('g')
     .attr('class', 'mouse-up')

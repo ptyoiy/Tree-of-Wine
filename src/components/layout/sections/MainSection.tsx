@@ -29,6 +29,7 @@ export default function MainSection({ data }: MainSectionProps) {
           gridColumn: '2 / 3',
           justifySelf: 'center',
           alignSelf: 'center',
+          zIndex: 999
         }}
         selected={fittingToTheEnd}
         value={'fittingToTheEnd'}
@@ -37,7 +38,7 @@ export default function MainSection({ data }: MainSectionProps) {
         fitting To The End
       </ToggleButton>
       <RadialDendrogram
-        width={650}
+        width={700}
         fontSize={9.5}
         data={data}
         fittingToTheEnd={fittingToTheEnd}

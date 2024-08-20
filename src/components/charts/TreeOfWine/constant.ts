@@ -1,0 +1,1 @@
+export const mainChartTransform = `translate(20, -50)`;
