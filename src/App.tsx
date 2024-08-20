@@ -1,10 +1,8 @@
-import { Container, Paper, ToggleButton } from '@mui/material';
-import { useMemo, useState } from 'react';
-import { RadialDendrogram } from './components/charts/TreeOfWine';
-import AppNavbar from './components/layout/appbar/AppNavbar.tsx';
-import LeftSection from './components/layout/LeftSection.tsx';
+import { Container } from '@mui/material';
+import { useMemo } from 'react';
+import { AppNavbar } from './components/layout/appNavbar';
 import { LoadingBoundary } from './components/layout/LoadingBoundary';
-import RightSection from './components/layout/RightSection.tsx';
+import { LeftSection, MainSection, RightSection } from './components/layout/sections';
 import { useWineDataCsv } from './utils/csvHandler';
 import { makeTree, WineData } from './utils/makeTree';
 
@@ -20,7 +18,7 @@ const columns: (keyof WineData)[] = ['Country', 'Region', 'Designation'];
 
 function App() {
   const { data: csvData, isLoading } = useWineDataCsv();
-  const { treeData, fittingToTheEnd, handleToggleChange } = useData(csvData);
+  const { treeData } = useData(csvData);
   return (
     <LoadingBoundary isLoading={isLoading}>
       <AppNavbar />
@@ -29,43 +27,11 @@ function App() {
         sx={{
           display: '-webkit-box',
           height: '100vh',
-          margin: '0'
+          margin: '0',
         }}
       >
         <LeftSection />
-        <Paper
-          elevation={5}
-          sx={{
-            display: 'grid',
-            gridTemplateRows: '50px auto',
-            gridTemplateColumns: 'auto 150px',
-            width: 'fit-content',
-            height: '100vh',
-            overflow: 'hidden',
-          }}
-        >
-          <ToggleButton
-            sx={{
-              position: 'relative',
-              right: 0,
-              gridRow: '1 / 2',
-              gridColumn: '2 / 3',
-              justifySelf: 'center',
-              alignSelf: 'center',
-            }}
-            selected={fittingToTheEnd}
-            value={'fittingToTheEnd'}
-            onChange={handleToggleChange}
-          >
-            fitting To The End
-          </ToggleButton>
-          <RadialDendrogram
-            width={800}
-            fontSize={9.5}
-            data={treeData}
-            fittingToTheEnd={fittingToTheEnd}
-          />
-        </Paper>
+        <MainSection data={treeData} />
         <RightSection data={treeData} />
       </Container>
     </LoadingBoundary>
@@ -73,10 +39,8 @@ function App() {
 }
 
 function useData(csvData: WineData[]) {
-  const [fittingToTheEnd, setFittingToTheEnd] = useState(false);
-  const handleToggleChange = () => setFittingToTheEnd(!fittingToTheEnd);
   const treeData = useMemo(() => makeTree(csvData, ...columns), [csvData]);
-  return { treeData, fittingToTheEnd, handleToggleChange };
+  return { treeData };
 }
 
 export default App;

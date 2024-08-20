@@ -1,6 +1,6 @@
 import { Box, Paper } from '@mui/material';
-import { Tree, WineData } from '../../utils/makeTree';
-import { BubbleChart } from '../charts/bubble';
+import { Tree, WineData } from '../../../utils/makeTree';
+import { BubbleChart } from '../../charts/bubble';
 
 type SectionProps = {
   data: WineData | Tree;
