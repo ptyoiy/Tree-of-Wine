@@ -1,9 +1,10 @@
 import { Container, Paper, ToggleButton } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { RadialDendrogram } from './components/charts/TreeOfWine';
+import AppNavbar from './components/layout/appbar/AppNavbar.tsx';
+import LeftSection from './components/layout/LeftSection.tsx';
 import { LoadingBoundary } from './components/layout/LoadingBoundary';
 import RightSection from './components/layout/RightSection.tsx';
-import { SideBar } from './components/layout/SideBar.tsx';
 import { useWineDataCsv } from './utils/csvHandler';
 import { makeTree, WineData } from './utils/makeTree';
 
@@ -22,13 +23,16 @@ function App() {
   const { treeData, fittingToTheEnd, handleToggleChange } = useData(csvData);
   return (
     <LoadingBoundary isLoading={isLoading}>
+      <AppNavbar />
       <Container
-        maxWidth={false}
+        maxWidth="xl"
         sx={{
-          display: 'flex',
+          display: '-webkit-box',
+          height: '100vh',
+          margin: '0'
         }}
       >
-        <SideBar />
+        <LeftSection />
         <Paper
           elevation={5}
           sx={{

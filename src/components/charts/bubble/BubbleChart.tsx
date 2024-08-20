@@ -21,7 +21,7 @@ export default function BubbleChart(props: BubbleChartProps) {
     <>
       <Button
         variant="contained"
-        sx={{ position: 'absolute', transform: 'translateX(286px)' }}
+        sx={{ position: 'absolute', transform: 'translateX(235px)' }}
         ref={btnRef}
       >
         ↑

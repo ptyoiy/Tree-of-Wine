@@ -12,16 +12,14 @@ const RightSection = ({ data }: SectionProps) => {
       sx={{
         display: 'grid',
         gridTemplateRows: '1fr 1fr 1fr',
-        height: '100vh',
-        width: '350px',
         border: 'solid 1px black',
         gap: '1px',
       }}
     >
-      <Paper sx={{}}>
+      <Paper>
         <BubbleChart data={data} />
       </Paper>
-      <Paper sx={{}}>Select Statistic Info Chart</Paper>
+      <Paper>Select Statistic Info Chart</Paper>
       <Paper>Mini-Map</Paper>
     </Box>
   );
