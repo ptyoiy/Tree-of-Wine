@@ -1,5 +1,6 @@
 /* eslint-disable no-var */
 import * as d3 from 'd3';
+import { MutableRefObject } from 'react';
 import { Tree, WineData } from './makeTree';
 
 export const color = d3
@@ -35,4 +36,8 @@ export const getCountryAtBubble = (d: d3.HierarchyNode<WineData>) => {
 export function getContrastingColor(color: string) {
   const labColor = d3.lab(color);  // 입력된 색상을 LAB 색상 공간으로 변환
   return labColor.l > 50 ? "#000000" : "#FFFFFF";  // 명도(l)가 50 이상이면 검은색, 아니면 흰색 반환
+}
+
+export function getParent<T extends SVGElement>(ref: MutableRefObject<T>): HTMLDivElement | null {
+  return ref.current?.parentElement as HTMLDivElement;
 }

@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import { color, getContrastingColor, getCountryAtBubble } from '../../../utils/chartUtils';
+import { color, getContrastingColor, getCountryAtBubble, getParent } from '../../../utils/chartUtils';
 import { Tree, WineData } from '../../../utils/makeTree';
 
 export function setLayout(svgRef: MutableRefObject<SVGSVGElement>, pack: d3.PackLayout<any>) {
   const svg = d3.select(svgRef.current);
-  const parent = svgRef.current.parentElement;
+  const parent = getParent(svgRef);
   const width = +parent!.clientWidth;
   const height = +parent!.clientHeight;
   const margin = 1;

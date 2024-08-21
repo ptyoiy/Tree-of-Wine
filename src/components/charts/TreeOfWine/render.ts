@@ -68,13 +68,9 @@ export function render(
 
 export function setLayout(
   svgRef: MutableRefObject<SVGSVGElement>,
-  sizeRef: MutableRefObject<number>,
+  size: number,
   fontSize: number
 ) {
-  const parent = svgRef.current.parentElement;
-  if (!sizeRef.current) sizeRef.current = parent!.clientWidth - 100;
-  console.log(parent, parent?.clientWidth);
-  const size = sizeRef.current;
   const halfSize = size / 2;
   const svg = d3.select(svgRef.current);
 

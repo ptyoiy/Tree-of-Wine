@@ -38,7 +38,6 @@ export default function MainSection({ data }: MainSectionProps) {
         fitting To The End
       </ToggleButton>
       <RadialDendrogram
-        width={700}
         fontSize={9.5}
         data={data}
         fittingToTheEnd={fittingToTheEnd}

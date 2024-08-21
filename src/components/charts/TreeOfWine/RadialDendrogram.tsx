@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as d3 from 'd3';
-import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
+import { getParent } from '../../../utils/chartUtils';
 import { Tree, WineData } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
 import { render, setLayout } from './render';
 
 type RadialDendrogramProps = {
-  width: number;
   fontSize: number;
   data: WineData | Tree;
   fittingToTheEnd: boolean;
@@ -29,51 +29,43 @@ export default function RadialDendrogram(props: RadialDendrogramProps) {
   );
 }
 
-function useRenderChart({
-  width,
-  data,
-  fontSize,
-  fittingToTheEnd,
-}: RadialDendrogramProps) {
+function useRenderChart({ data, fontSize, fittingToTheEnd }: RadialDendrogramProps) {
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
-  const sizeRef = useRef(0);
-  const radius = width / 2;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
-  const { nodeData, linkData } = useChartData(fittingToTheEnd, data, radius);
 
   useEffect(() => {
-    setLayout(svgRef, sizeRef, fontSize);
+    const { nodeData, linkData, size } = getChartData(svgRef, data, fittingToTheEnd);
+    setLayout(svgRef, size, fontSize);
     render(svgRef, nodeData, linkData, onMouseOver, onMouseOut);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
-  return { svgRef, sizeRef, tooltipContent, tooltipVisible, tooltipCoords };
+  return { svgRef, tooltipContent, tooltipVisible, tooltipCoords };
 }
 
-function useChartData(fittingToTheEnd: boolean, treeData: WineData | Tree, radius: number) {
-  /** Tree data 생성
-   * @param fittingToTheEnd 값에 따라 layout만 다른 동일한 tree 데이터 생성
-   */
-  const { nodeData, linkData } = useMemo(() => {
-    let tree: d3.HierarchyNode<Tree | WineData>;
-    if (fittingToTheEnd) {
-      const treeConstructor = d3.cluster<Tree | WineData>().size([2 * Math.PI, radius - 100]);
-      const hierarchy = d3.hierarchy(treeData).sort((a, b) => a.height - b.height);
-      tree = treeConstructor(hierarchy);
-    } else {
-      tree = d3.hierarchy(treeData).sort((a, b) => a.height - b.height);
-      d3
-        .tree<Tree | WineData>()
-        .size([2 * Math.PI, radius - 100])
-        .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth)(tree);
-    }
+function getChartData(
+  ref: MutableRefObject<SVGSVGElement>,
+  data: Tree | WineData,
+  fittingToTheEnd: boolean
+) {
+  const parent = getParent(ref);
+  const size = parent!.clientWidth;
+  const radius = (size / 2) - 250;
 
-    const nodeData = tree.descendants().reverse();
-    const linkData = tree.links();
+  let tree: d3.HierarchyNode<Tree | WineData>;
+  if (fittingToTheEnd) {
+    const treeConstructor = d3.cluster<Tree | WineData>().size([2 * Math.PI, radius]);
+    const hierarchy = d3.hierarchy(data).sort((a, b) => a.height - b.height);
+    tree = treeConstructor(hierarchy);
+  } else {
+    tree = d3.hierarchy(data).sort((a, b) => a.height - b.height);
+    d3
+      .tree<Tree | WineData>()
+      .size([2 * Math.PI, radius])
+      .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth)(tree);
+  }
 
-    return { nodeData, linkData };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fittingToTheEnd]);
-
-  return { nodeData, linkData };
+  const nodeData = tree.descendants().reverse();
+  const linkData = tree.links();
+  return { nodeData, linkData, size: size };
 }
