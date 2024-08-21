@@ -1,13 +1,21 @@
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import { color, getContrastingColor, getCountryAtBubble, getParent } from '../../../utils/chartUtils';
+import {
+  color,
+  getContrastingColor,
+  getCountryAtBubble
+} from '../../../utils/chartUtils';
 import { Tree, WineData } from '../../../utils/makeTree';
+import { Size } from '../wrapper';
 
-export function setLayout(svgRef: MutableRefObject<SVGSVGElement>, pack: d3.PackLayout<any>) {
+export function setLayout(
+  svgRef: MutableRefObject<SVGSVGElement>,
+  size: Size,
+  pack: d3.PackLayout<any>
+) {
   const svg = d3.select(svgRef.current);
-  const parent = getParent(svgRef);
-  const width = +parent!.clientWidth;
-  const height = +parent!.clientHeight;
+
+  const { width, height } = size;
   const margin = 1;
 
   pack.size([width - margin * 2, height - margin * 2]);
@@ -37,17 +45,17 @@ export function renderBubbleChart(
   const svg = d3.select(svgRef.current);
   const node = svg.select('g.node-group');
   const text = svg.select('g.text-group');
+  let currentNodeName = '';
 
   btnRef.current.onclick = () => {
     const parent = tree.find((node) => (node.data as Tree).name === currentNodeName)?.parent;
     makeBubble(parent!.data);
   };
-
+  makeBubble(tree.data);
   /**
    * 클릭을 통해 반복 호출해야 하기 때문에 함수로 작성
    * 데이터(노드) 클릭 -> 클릭한 노드로 tree를 변경(onClick) -> 좌표 재계산(pack) -> 클릭한 데이터 시각화
    */
-  let currentNodeName = '';
   function makeBubble(treeData: Tree | WineData) {
     currentNodeName = (treeData as Tree).name;
     btnRef.current.classList.toggle('Mui-disabled', currentNodeName === 'wine');
@@ -119,7 +127,6 @@ export function renderBubbleChart(
         getContrastingColor(color(getCountryAtBubble(d as d3.HierarchyNode<WineData>)))
       );
   }
-  makeBubble(tree.data);
 }
 
 export function renderCirclePacking(

@@ -3,13 +3,16 @@ import * as d3 from 'd3';
 import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
+import { Size } from '../wrapper';
+import autoSizingWrapper from '../wrapper/Wrapper';
 import { renderBubbleChart, setLayout } from './render';
 
 type BubbleChartProps = {
   data: WineData | Tree;
+  size?: Size;
 };
-
-export default function BubbleChart(props: BubbleChartProps) {
+const WrappedBubbleChart = autoSizingWrapper(BubbleChart);
+function BubbleChart(props: BubbleChartProps) {
   const {
     svgRef,
     btnRef,
@@ -24,20 +27,20 @@ export default function BubbleChart(props: BubbleChartProps) {
           ↑
         </Button>
       </div>
-      <svg ref={svgRef}></svg>
+      <svg ref={svgRef} />
       <Tooltip content={tooltipContent} visible={tooltipVisible} x={x} y={y} />
     </>
   );
 }
 
 // pack, data 제작
-function useRenderChart({ data }: BubbleChartProps) {
+function useRenderChart({ data, size }: BubbleChartProps) {
   const svgRef = useRef<SVGSVGElement>() as MutableRefObject<SVGSVGElement>;
   const btnRef = useRef<HTMLButtonElement>() as MutableRefObject<HTMLButtonElement>;
   const { tooltipVisible, tooltipCoords, tooltipContent, onMouseOver, onMouseOut } = useTooltip();
   const { pack, originTree } = useChartData(data);
   useEffect(() => {
-    setLayout(svgRef, pack);
+    setLayout(svgRef, size!, pack);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -73,3 +76,5 @@ function useChartData(data: WineData | Tree) {
   );
   return { pack, originTree };
 }
+
+export default WrappedBubbleChart

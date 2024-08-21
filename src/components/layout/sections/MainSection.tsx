@@ -1,5 +1,5 @@
 import { Paper, ToggleButton } from '@mui/material';
-import { useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
 import { RadialDendrogram } from '../../charts/TreeOfWine';
 
@@ -9,6 +9,7 @@ type MainSectionProps = {
 
 export default function MainSection({ data }: MainSectionProps) {
   const [fittingToTheEnd, setFittingToTheEnd] = useState(false);
+  const parentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const handleToggleChange = () => setFittingToTheEnd(!fittingToTheEnd);
   return (
     <Paper
@@ -20,6 +21,7 @@ export default function MainSection({ data }: MainSectionProps) {
         width: '60%',
         overflow: 'hidden',
       }}
+      ref={parentRef}
     >
       <ToggleButton
         sx={{
@@ -38,9 +40,10 @@ export default function MainSection({ data }: MainSectionProps) {
         fitting To The End
       </ToggleButton>
       <RadialDendrogram
-        fontSize={9.5}
+        fontSize={11}
         data={data}
         fittingToTheEnd={fittingToTheEnd}
+        parentRef={parentRef}
       />
     </Paper>
   );
