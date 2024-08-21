@@ -4,15 +4,13 @@ import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
 import { Size } from '../wrapper';
-import autoSizingWrapper from '../wrapper/Wrapper';
 import { renderBubbleChart, setLayout } from './render';
 
 type BubbleChartProps = {
   data: WineData | Tree;
   size?: Size;
 };
-const WrappedBubbleChart = autoSizingWrapper(BubbleChart);
-function BubbleChart(props: BubbleChartProps) {
+export default function BubbleChart(props: BubbleChartProps) {
   const {
     svgRef,
     btnRef,
@@ -76,5 +74,3 @@ function useChartData(data: WineData | Tree) {
   );
   return { pack, originTree };
 }
-
-export default WrappedBubbleChart

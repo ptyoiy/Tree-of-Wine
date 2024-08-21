@@ -1,14 +1,12 @@
 import { Box, Paper } from '@mui/material';
-import { MutableRefObject, useRef } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
 import { BubbleChart } from '../../charts/bubble';
-
+import { Chart } from '../../charts/wrapper';
 
 type SectionProps = {
   data: WineData | Tree;
 };
-const RightSection = ({ data }: SectionProps) => {
-  const section1Ref = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
+const RightSection = (data: SectionProps) => {
   return (
     <Box
       sx={{
@@ -19,9 +17,7 @@ const RightSection = ({ data }: SectionProps) => {
         gap: '1px',
       }}
     >
-      <Paper ref={section1Ref}>
-        <BubbleChart data={data} parentRef={section1Ref} />
-      </Paper>
+      <Chart render={BubbleChart} chartProps={data} />
       <Paper>Select Statistic Info Chart</Paper>
       <Paper>Mini-Map</Paper>
     </Box>

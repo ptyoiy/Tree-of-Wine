@@ -1,28 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { ToggleButton } from '@mui/material';
 import * as d3 from 'd3';
-import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { Tree, WineData } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
-import autoSizingWrapper, { Size } from '../wrapper/Wrapper';
+import { Size } from '../wrapper/Wrapper';
 import { render, setLayout } from './render';
 
 type RadialDendrogramProps = {
   fontSize: number;
   data: WineData | Tree;
-  fittingToTheEnd: boolean;
   size?: Size;
 };
-const WrappedRadialDendrogram = autoSizingWrapper(RadialDendrogram);
-function RadialDendrogram(props: RadialDendrogramProps) {
-  const { svgRef, tooltipContent, tooltipVisible, tooltipCoords } = useRenderChart(props);
+export default function RadialDendrogram(props: RadialDendrogramProps) {
+  const {
+    svgRef,
+    fittingToTheEnd,
+    handleToggleChange,
+    tooltipContent,
+    tooltipVisible,
+    tooltipCoords: { x, y },
+  } = useRenderChart(props);
   return (
     <>
+      <ToggleButton
+        sx={{
+          position: 'relative',
+          right: 0,
+          gridRow: '1 / 2',
+          gridColumn: '2 / 3',
+          justifySelf: 'center',
+          alignSelf: 'center',
+          zIndex: 999,
+        }}
+        selected={fittingToTheEnd}
+        value={'fittingToTheEnd'}
+        onChange={handleToggleChange}
+      >
+        fitting To The End
+      </ToggleButton>
       <Tooltip
         content={tooltipContent}
         visible={tooltipVisible}
-        x={tooltipCoords.x}
-        y={tooltipCoords.y}
+        x={x}
+        y={y}
       />
       <svg style={{ gridRow: '2 / 3', gridColumn: '1 / 2' }} ref={svgRef} />
       <RotateSlider svgRef={svgRef} />
@@ -30,7 +52,9 @@ function RadialDendrogram(props: RadialDendrogramProps) {
   );
 }
 
-function useRenderChart({ data, size, fontSize, fittingToTheEnd }: RadialDendrogramProps) {
+function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
+  const [fittingToTheEnd, setFittingToTheEnd] = useState(false);
+  const handleToggleChange = () => setFittingToTheEnd(!fittingToTheEnd);
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
   const { nodeData, linkData, width } = useChartData(data, size!, fittingToTheEnd);
@@ -41,7 +65,14 @@ function useRenderChart({ data, size, fontSize, fittingToTheEnd }: RadialDendrog
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
 
-  return { svgRef, tooltipContent, tooltipVisible, tooltipCoords };
+  return {
+    svgRef,
+    fittingToTheEnd,
+    handleToggleChange,
+    tooltipContent,
+    tooltipVisible,
+    tooltipCoords,
+  };
 }
 
 function useChartData(data: Tree | WineData, { width }: Size, fittingToTheEnd: boolean) {
@@ -66,5 +97,3 @@ function useChartData(data: Tree | WineData, { width }: Size, fittingToTheEnd: b
   }, [data, fittingToTheEnd, width]);
   return { nodeData, linkData, width };
 }
-
-export default WrappedRadialDendrogram;
