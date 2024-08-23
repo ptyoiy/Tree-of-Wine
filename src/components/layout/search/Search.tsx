@@ -25,7 +25,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function RenderGroup({ data }: { data: WineData[] }) {
-  const { theme, value, setValue, options, keyBoundaries } = useSearch(data);
+  const { theme, value, setValue, options, keyBoundaries, handleGroupSelect } = useSearch(data);
   return (
     <Autocomplete
       id="grouped-demo"
@@ -52,7 +52,11 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
         return (
           <li key={params.key}>
             {keyBoundaries.includes(+params.key) && <GroupHeader theme={theme}>{country}</GroupHeader>}
-            <GroupHeader theme={theme}>{region}</GroupHeader>
+            <GroupHeader theme={theme} sx={{
+              cursor: 'pointer', '&:hover': {
+                backgroundColor: lighten(theme.palette.primary.light, 0.5)
+              }
+            }} onClick={() => handleGroupSelect(params.group)} >{region}</GroupHeader>
             <GroupItems>{params.children}</GroupItems>
           </li>
         );
@@ -84,10 +88,11 @@ function useSearch(data: WineData[]) {
       ...d,
       group: `${d.Country},${d.Region}`
     }));
-    return options.sort((a, b) => {
+    options.sort((a, b) => {
       const countryComparison = a.Country.localeCompare(b.Country);
       return countryComparison !== 0 ? countryComparison : a.Region.localeCompare(b.Region)
     });
+    return options;
   }, [data]);
   const keyBoundaries = useMemo(() => {
     return Object.values(Object.groupBy(data, (item) => item.Country)).reduce((acc, val, idx, arr) => {
@@ -98,5 +103,23 @@ function useSearch(data: WineData[]) {
     }, [0] as number[])
   }, [data]);
 
-  return { theme, value, setValue, options, keyBoundaries }
+  const handleGroupSelect = (group: string) => {
+    const filtered = options.filter((val) => val.group === group);
+    const valueSet = new Set(value);
+    const allSelected = filtered.every((filter) => valueSet.has(filter));
+
+    if (allSelected) {
+      // 모두 선택된 상태이면 해당 그룹의 항목을 제거
+      const newValue = value.filter((val) => !filtered.includes(val));
+      if (newValue.length !== value.length) {
+        setValue(newValue);
+      }
+    } else {
+      // 하나라도 선택되지 않았다면 모두 추가
+      const newValue = [...value, ...filtered];
+      setValue(newValue);
+    }
+  }
+
+  return { theme, value, setValue, options, keyBoundaries, handleGroupSelect }
 }
