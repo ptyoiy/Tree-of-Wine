@@ -19,6 +19,7 @@ const columns: (keyof WineData)[] = ['Country', 'Region', 'Designation'];
 function App() {
   const { data: csvData, isLoading } = useWineDataCsv();
   const { treeData } = useData(csvData);
+  console.log({treeData})
   return (
     <LoadingBoundary isLoading={isLoading}>
       <AppNavbar />
@@ -31,7 +32,7 @@ function App() {
           margin: '0',
         }}
       >
-        <LeftSection />
+        <LeftSection csvData={csvData} />
         <MainSection data={treeData} />
         <RightSection data={treeData} />
       </Container>
