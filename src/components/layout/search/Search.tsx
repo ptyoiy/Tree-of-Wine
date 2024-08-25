@@ -32,7 +32,7 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
       options={options}
       groupBy={(option) => option.group}
       getOptionLabel={(option) => option.values}
-      isOptionEqualToValue={(option, value) => option.Designation === value.Designation}
+      isOptionEqualToValue={(option, value) => option.values === value.values}
       sx={{ width: '100%', padding: '8px 0' }}
       disableCloseOnSelect
       multiple
@@ -40,6 +40,9 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
       value={value}
       onChange={(_event, value) => {
         setValue(value);
+      }}
+      onClose={() => {
+        searchTextRef.current = '';
       }}
       renderInput={(params) => (
         <TextField
