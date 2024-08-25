@@ -5,7 +5,7 @@ import { Checkbox, Theme } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { darken, lighten, styled } from '@mui/system';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { WineData } from '../../../utils/makeTree';
 
 const GroupHeader = styled('div')(({ theme }: { theme: Theme }) => ({
@@ -25,13 +25,13 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function RenderGroup({ data }: { data: WineData[] }) {
-  const { theme, value, setValue, options, keyBoundaries, handleGroupSelect } = useSearch(data);
+  const { theme, value, setValue, options, keyBoundaries, handleGroupSelect, searchTextRef } = useSearch(data);
   return (
     <Autocomplete
       id="grouped-demo"
       options={options}
       groupBy={(option) => option.group}
-      getOptionLabel={(option) => option.group}
+      getOptionLabel={(option) => option.values}
       isOptionEqualToValue={(option, value) => option.Designation === value.Designation}
       sx={{ width: '100%', padding: '8px 0' }}
       disableCloseOnSelect
@@ -45,7 +45,9 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
         <TextField
           {...params}
           label={value.length ? `Selected ${value.length} items` : "Search"}
-          InputProps={{ ...params.InputProps, startAdornment: null }} />
+          InputProps={{ ...params.InputProps, startAdornment: null }}
+          onChange={(event) => searchTextRef.current = event.target.value}
+        />
       )}
       renderGroup={(params) => {
         const [country, region] = params.group.split(',');
@@ -62,8 +64,18 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
         );
       }}
       renderOption={(props, option, { selected }) => {
+        // 검색어 하이라이팅을 위한 텍스트 분할 및 하이라이팅
+        const highlightText = (text: string, query: string) => {
+          if (!query) return text;
+
+          const regex = new RegExp(`(${query})`, 'gi');
+          const highlighted = text.replace(regex, (match) => `<mark>${match}</mark>`);
+
+          return <span dangerouslySetInnerHTML={{ __html: highlighted }} />;
+        };
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { key, id, ...optionProps } = props;
+        const text = highlightText(option.Designation, searchTextRef.current);
         return (
           <li key={id} {...optionProps}>
             <Checkbox
@@ -72,7 +84,7 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
               style={{ marginRight: 8 }}
               checked={selected}
             />
-            {option.Designation}
+            {text}
           </li>
         );
       }}
@@ -82,11 +94,13 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
 
 function useSearch(data: WineData[]) {
   const theme = useTheme() as Theme;
-  const [value, setValue] = useState<(WineData & { group: string })[]>([]);
+  const [value, setValue] = useState<(WineData & { group: string, values: string })[]>([]);
+  const searchTextRef = useRef<string>('');
   const options = useMemo(() => {
     const options = data.map(d => ({
       ...d,
-      group: `${d.Country},${d.Region}`
+      group: `${d.Country},${d.Region}`,
+      values: Object.values(d).join('')
     }));
     options.sort((a, b) => {
       const countryComparison = a.Country.localeCompare(b.Country);
@@ -121,5 +135,5 @@ function useSearch(data: WineData[]) {
     }
   }
 
-  return { theme, value, setValue, options, keyBoundaries, handleGroupSelect }
+  return { theme, searchTextRef, value, setValue, options, keyBoundaries, handleGroupSelect }
 }
