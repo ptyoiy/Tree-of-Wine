@@ -1,18 +1,23 @@
 import { Backdrop, CircularProgress } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 export function LoadingBoundary({
   children,
   isLoading,
 }: {
   children: ReactNode;
-  isLoading: boolean;
+  isLoading?: boolean;
 }) {
-  if (isLoading)
-    return (
-      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
-  return <>{children}</>;
+  if (isLoading != undefined) {
+    return <>{isLoading ? <Loading /> : children}</>;
+  }
+  return <Suspense fallback={<Loading />}>{children}</Suspense>;
+}
+
+function Loading({ isLoading = true }: { isLoading?: boolean }) {
+  return (
+    <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  );
 }

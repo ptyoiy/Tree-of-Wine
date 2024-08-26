@@ -1,9 +1,11 @@
 import { Box, Paper } from '@mui/material';
-import { WineData } from '../../../utils/makeTree';
+import { useRecoilValue } from 'recoil';
+import { wineSelectionSelector } from '../../../recoil/search';
 import { Search } from '../search';
 
+const LeftSection = () => {
+  const selection = useRecoilValue(wineSelectionSelector);
 
-const LeftSection = ({ csvData }: { csvData: WineData[] }) => {
   return (
     <Box
       sx={{
@@ -14,8 +16,12 @@ const LeftSection = ({ csvData }: { csvData: WineData[] }) => {
         gap: '1px',
       }}
     >
-      <Search data={csvData} />
-      <Paper>selected list</Paper>
+      <Search />
+      <Paper>
+        {selection.map((sel) => (
+          <p key={sel.Designation}>{sel.Designation}</p>
+        ))}
+      </Paper>
     </Box>
   );
 };

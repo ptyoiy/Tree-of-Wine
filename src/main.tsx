@@ -1,24 +1,24 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import ReactDOM from 'react-dom/client';
+import { RecoilRoot } from 'recoil';
 import App from './App.tsx';
 import ErrorBoundary from './components/layout/ErrorBoundary.tsx';
+import { LoadingBoundary } from './components/layout/LoadingBoundary.tsx';
 import './index.css';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2', // 기본 primary 색상 설정
-    },
-  },
-});
+const theme = createTheme();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
-  <ErrorBoundary>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
-  </ErrorBoundary>
+  <RecoilRoot>
+    <ErrorBoundary>
+      <LoadingBoundary>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </LoadingBoundary>
+    </ErrorBoundary>
+  </RecoilRoot>
 
   // </React.StrictMode>,
 );

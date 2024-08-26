@@ -66,11 +66,7 @@ export function render(
     .attr('stroke', 'white');
 }
 
-export function setLayout(
-  svgRef: MutableRefObject<SVGSVGElement>,
-  size: number,
-  fontSize: number
-) {
+export function setLayout(svgRef: MutableRefObject<SVGSVGElement>, size: number, fontSize: number) {
   const halfSize = size / 2;
   const svg = d3.select(svgRef.current);
 
@@ -94,10 +90,7 @@ export function setLayout(
    * move도 up처럼 증분하며 회전시키면 비정상적으로 빠르게 회전하기 때문에 이런 방식으로 구현함
    * 한 g 대신 svg를 회전시키면 svg의 width, height를 똑같이 맞춰야 하는 불편함이 있음
    */
-  const outerG = svg
-    .append('g')
-    .attr('class', 'mouse-move')
-    .attr('transform', mainChartTransform);
+  const outerG = svg.append('g').attr('class', 'mouse-move').attr('transform', mainChartTransform);
   const g = outerG
     .append('g')
     .attr('class', 'mouse-up')

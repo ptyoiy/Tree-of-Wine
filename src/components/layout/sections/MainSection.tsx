@@ -1,15 +1,13 @@
-import { Tree, WineData } from '../../../utils/makeTree';
+import { useRecoilValue } from 'recoil';
+import { treeDataSelector } from '../../../recoil/wineData';
 import { RadialDendrogram } from '../../charts/TreeOfWine';
 import { Chart } from '../../charts/wrapper';
 
-type MainSectionProps = {
-  data: WineData | Tree;
-};
-
-export default function MainSection({ data }: MainSectionProps) {
+export default function MainSection() {
+  const data = useRecoilValue(treeDataSelector);
   const chartProps = {
-    data,
     fontSize: 11,
+    data
   };
   return (
     <Chart

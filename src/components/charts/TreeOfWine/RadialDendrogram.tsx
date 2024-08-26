@@ -40,12 +40,7 @@ export default function RadialDendrogram(props: RadialDendrogramProps) {
       >
         fitting To The End
       </ToggleButton>
-      <Tooltip
-        content={tooltipContent}
-        visible={tooltipVisible}
-        x={x}
-        y={y}
-      />
+      <Tooltip content={tooltipContent} visible={tooltipVisible} x={x} y={y} />
       <svg style={{ gridRow: '2 / 3', gridColumn: '1 / 2' }} ref={svgRef} />
       <RotateSlider svgRef={svgRef} />
     </>

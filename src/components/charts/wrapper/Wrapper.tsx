@@ -1,12 +1,18 @@
 import { Paper, PaperProps } from '@mui/material';
-import { ComponentProps, ComponentType, MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ComponentProps,
+  ComponentType,
+  MutableRefObject,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { LoadingBoundary } from '../../layout/LoadingBoundary';
 
 export type Size = { width: number; height: number };
 
-type ChartProps<
-  T extends ComponentType<ComponentProps<T>>
-> = PaperProps & {
+type ChartProps<T extends ComponentType<ComponentProps<T>>> = PaperProps & {
   render: T;
   chartProps: ComponentProps<T>;
 };

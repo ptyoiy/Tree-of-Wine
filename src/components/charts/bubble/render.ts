@@ -1,10 +1,6 @@
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import {
-  color,
-  getContrastingColor,
-  getCountryAtBubble
-} from '../../../utils/chartUtils';
+import { color, getContrastingColor, getCountryAtBubble } from '../../../utils/chartUtils';
 import { Tree, WineData } from '../../../utils/makeTree';
 import { Size } from '../wrapper';
 
@@ -46,7 +42,6 @@ export function renderBubbleChart(
   const node = svg.select('g.node-group');
   const text = svg.select('g.text-group');
   let currentNodeName = '';
-
   btnRef.current.onclick = () => {
     const parent = tree.find((node) => (node.data as Tree).name === currentNodeName)?.parent;
     makeBubble(parent!.data);

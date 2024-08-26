@@ -1,31 +1,26 @@
 import { useTheme } from '@emotion/react';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Checkbox, Theme } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { darken, lighten, styled } from '@mui/system';
-import { useMemo, useRef, useState } from 'react';
-import { WineData } from '../../../utils/makeTree';
+import { lighten } from '@mui/system';
+import { useMemo } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { searchTextAtom, wineSelectionAtom, wineSelectionSelector } from '../../../recoil/search';
+import { wineCsvDataSelector } from '../../../recoil/wineData';
+import { checkedIcon, GroupHeader, GroupItems, icon } from './style';
 
-const GroupHeader = styled('div')(({ theme }: { theme: Theme }) => ({
-  position: 'sticky',
-  top: '-8px',
-  padding: '4px 10px',
-  zIndex: 999,
-  color: theme.palette.primary.main,
-  backgroundColor: theme.palette.mode === 'light'
-    ? lighten(theme.palette.primary.light, 0.85)
-    : darken(theme.palette.primary.main, 0.8),
-}));
-const GroupItems = styled('ul')({
-  padding: 0,
-});
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-export default function RenderGroup({ data }: { data: WineData[] }) {
-  const { theme, value, setValue, options, keyBoundaries, handleGroupSelect, searchTextRef } = useSearch(data);
+export default function RenderGroup() {
+  const {
+    theme,
+    selection,
+    selectionArray,
+    setSelection,
+    options,
+    keyBoundaries,
+    handleGroupSelect,
+    searchText,
+    setSearchText,
+  } = useSearch();
   return (
     <Autocomplete
       id="grouped-demo"
@@ -37,31 +32,40 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
       disableCloseOnSelect
       multiple
       fullWidth
-      value={value}
+      value={selectionArray}
       onChange={(_event, value) => {
-        setValue(value);
+        setSelection(new Set(value));
       }}
       onClose={() => {
-        searchTextRef.current = '';
+        setSearchText('');
       }}
       renderInput={(params) => (
         <TextField
           {...params}
-          label={value.length ? `Selected ${value.length} items` : "Search"}
+          label={selection.size ? `Selected ${selection.size} items` : 'Search'}
           InputProps={{ ...params.InputProps, startAdornment: null }}
-          onChange={(event) => searchTextRef.current = event.target.value}
+          onChange={(event) => setSearchText(event.target.value)}
         />
       )}
       renderGroup={(params) => {
         const [country, region] = params.group.split(',');
         return (
           <li key={params.key}>
-            {keyBoundaries.includes(+params.key) && <GroupHeader theme={theme}>{country}</GroupHeader>}
-            <GroupHeader theme={theme} sx={{
-              cursor: 'pointer', '&:hover': {
-                backgroundColor: lighten(theme.palette.primary.light, 0.5)
-              }
-            }} onClick={() => handleGroupSelect(params.group)} >{region}</GroupHeader>
+            {keyBoundaries.includes(+params.key) && (
+              <GroupHeader theme={theme}>{country}</GroupHeader>
+            )}
+            <GroupHeader
+              theme={theme}
+              sx={{
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: lighten(theme.palette.primary.light, 0.5),
+                },
+              }}
+              onClick={() => handleGroupSelect(params.group)}
+            >
+              {region}
+            </GroupHeader>
             <GroupItems>{params.children}</GroupItems>
           </li>
         );
@@ -78,7 +82,7 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
         };
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { key, id, ...optionProps } = props;
-        const text = highlightText(option.Designation, searchTextRef.current);
+        const text = highlightText(option.Designation, searchText);
         return (
           <li key={id} {...optionProps}>
             <Checkbox
@@ -95,48 +99,65 @@ export default function RenderGroup({ data }: { data: WineData[] }) {
   );
 }
 
-function useSearch(data: WineData[]) {
+function useSearch() {
+  const data = useRecoilValue(wineCsvDataSelector);
   const theme = useTheme() as Theme;
-  const [value, setValue] = useState<(WineData & { group: string, values: string })[]>([]);
-  const searchTextRef = useRef<string>('');
+  const [selection, setSelection] = useRecoilState(wineSelectionAtom);
+  const selectionArray = useRecoilValue(wineSelectionSelector);
+  const [searchText, setSearchText] = useRecoilState(searchTextAtom);
+
   const options = useMemo(() => {
-    const options = data.map(d => ({
+    const options = data.map((d) => ({
       ...d,
       group: `${d.Country},${d.Region}`,
-      values: Object.values(d).join('')
+      values: Object.values(d).join(''),
     }));
     options.sort((a, b) => {
       const countryComparison = a.Country.localeCompare(b.Country);
-      return countryComparison !== 0 ? countryComparison : a.Region.localeCompare(b.Region)
+      return countryComparison !== 0 ? countryComparison : a.Region.localeCompare(b.Region);
     });
     return options;
   }, [data]);
+
   const keyBoundaries = useMemo(() => {
-    return Object.values(Object.groupBy(data, (item) => item.Country)).reduce((acc, val, idx, arr) => {
-      if (idx < arr.length - 1) {
-        acc.push(acc[idx] + val!.length);
-      }
-      return acc;
-    }, [0] as number[])
+    return Object.values(Object.groupBy(data, (item) => item.Country)).reduce(
+      (acc, val, idx, arr) => {
+        if (idx < arr.length - 1) {
+          acc.push(acc[idx] + val!.length);
+        }
+        return acc;
+      },
+      [0] as number[]
+    );
   }, [data]);
 
   const handleGroupSelect = (group: string) => {
-    const filtered = options.filter((val) => val.group === group);
-    const valueSet = new Set(value);
-    const allSelected = filtered.every((filter) => valueSet.has(filter));
-
-    if (allSelected) {
-      // 모두 선택된 상태이면 해당 그룹의 항목을 제거
-      const newValue = value.filter((val) => !filtered.includes(val));
-      if (newValue.length !== value.length) {
-        setValue(newValue);
-      }
+    // group에 포함된 모든 데이터
+    const newSelection = new Set(options.filter((val) => val.group === group));
+    // selection에 포함되지 않은 newSelection
+    const notSelected = newSelection.difference(selection);
+    if (notSelected.size) {
+      // 그룹 목록 중 하나라도 선택되지 않았다면 모두 추가
+      const newValue = selection.union(newSelection);
+      setSelection(newValue);
     } else {
-      // 하나라도 선택되지 않았다면 모두 추가
-      const newValue = [...value, ...filtered];
-      setValue(newValue);
+      // 모두 선택된 상태이면 해당 그룹의 항목을 제거
+      const newValue = selection.difference(newSelection);
+      if (newValue.size !== selection.size) {
+        setSelection(newValue);
+      }
     }
-  }
+  };
 
-  return { theme, searchTextRef, value, setValue, options, keyBoundaries, handleGroupSelect }
+  return {
+    theme,
+    searchText,
+    setSearchText,
+    selection,
+    selectionArray,
+    setSelection,
+    options,
+    keyBoundaries,
+    handleGroupSelect,
+  };
 }
