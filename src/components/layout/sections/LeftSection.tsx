@@ -1,11 +1,8 @@
-import { Box, Paper } from '@mui/material';
-import { useRecoilValue } from 'recoil';
-import { wineSelectionSelector } from '../../../recoil/search';
+import { Box } from '@mui/material';
 import { Search } from '../search';
+import { Table } from '../table';
 
 const LeftSection = () => {
-  const selection = useRecoilValue(wineSelectionSelector);
-
   return (
     <Box
       sx={{
@@ -17,11 +14,7 @@ const LeftSection = () => {
       }}
     >
       <Search />
-      <Paper>
-        {selection.map((sel) => (
-          <p key={sel.Designation}>{sel.Designation}</p>
-        ))}
-      </Paper>
+      <Table />
     </Box>
   );
 };

@@ -6,6 +6,7 @@ export type WineData = {
   Latitude: string;
   Longitude: string;
   Region: string;
+  id: string
 };
 
 export type Tree = {

@@ -15,7 +15,10 @@ export const wineCsvDataSelector = selector<WineData[]>({
       const result = await reader?.read();
       const decoder = new TextDecoder('utf-8');
       const csv = decoder.decode(result?.value);
-      const parsedData = Papa.parse<WineData>(csv, { header: true }).data;
+      const parsedData = Papa.parse<WineData>(csv, { header: true }).data.map((d, i) => ({
+        ...d,
+        id: i.toString(),
+      }));
 
       return parsedData;
     } catch (e) {
