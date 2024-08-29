@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchTextAtom, wineSelectionAtom, wineSelectionSelector } from '../../../recoil/search';
 import { wineCsvDataSelector } from '../../../recoil/wineData';
+import { toggleSelection } from '../../../utils/dataUtils';
 import { checkedIcon, GroupHeader, GroupItems, icon } from './style';
 
 export default function RenderGroup() {
@@ -15,7 +16,7 @@ export default function RenderGroup() {
     selection,
     selectionArray,
     setSelection,
-    options,
+    data,
     keyBoundaries,
     handleGroupSelect,
     searchText,
@@ -24,7 +25,7 @@ export default function RenderGroup() {
   return (
     <Autocomplete
       id="grouped-demo"
-      options={options}
+      options={data}
       groupBy={(option) => option.group}
       getOptionLabel={(option) => option.values}
       isOptionEqualToValue={(option, value) => option.values === value.values}
@@ -106,19 +107,6 @@ function useSearch() {
   const selectionArray = useRecoilValue(wineSelectionSelector);
   const [searchText, setSearchText] = useRecoilState(searchTextAtom);
 
-  const options = useMemo(() => {
-    const options = data.map((d) => ({
-      ...d,
-      group: `${d.Country},${d.Region}`,
-      values: Object.values(d).join(''),
-    }));
-    options.sort((a, b) => {
-      const countryComparison = a.Country.localeCompare(b.Country);
-      return countryComparison !== 0 ? countryComparison : a.Region.localeCompare(b.Region);
-    });
-    return options;
-  }, [data]);
-
   const keyBoundaries = useMemo(() => {
     return Object.values(Object.groupBy(data, (item) => item.Country)).reduce(
       (acc, val, idx, arr) => {
@@ -132,21 +120,8 @@ function useSearch() {
   }, [data]);
 
   const handleGroupSelect = (group: string) => {
-    // group에 포함된 모든 데이터
-    const newSelection = new Set(options.filter((val) => val.group === group));
-    // selection에 포함되지 않은 newSelection
-    const notSelected = newSelection.difference(selection);
-    if (notSelected.size) {
-      // 그룹 목록 중 하나라도 선택되지 않았다면 모두 추가
-      const newValue = selection.union(newSelection);
-      setSelection(newValue);
-    } else {
-      // 모두 선택된 상태이면 해당 그룹의 항목을 제거
-      const newValue = selection.difference(newSelection);
-      if (newValue.size !== selection.size) {
-        setSelection(newValue);
-      }
-    }
+    const newSelection = new Set(data.filter((val) => val.group === group));
+    toggleSelection(selection, newSelection, setSelection);
   };
 
   return {
@@ -156,7 +131,7 @@ function useSearch() {
     selection,
     selectionArray,
     setSelection,
-    options,
+    data,
     keyBoundaries,
     handleGroupSelect,
   };

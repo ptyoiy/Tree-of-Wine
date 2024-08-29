@@ -1,6 +1,7 @@
 /* eslint-disable no-var */
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
+import { COLUMNS } from '../recoil/wineData';
 import { Tree, WineData } from './makeTree';
 
 export const color = d3
@@ -34,10 +35,25 @@ export const getCountryAtBubble = (d: d3.HierarchyNode<WineData>) => {
 
 /** 보색 구하기 */
 export function getContrastingColor(color: string) {
-  const labColor = d3.lab(color);  // 입력된 색상을 LAB 색상 공간으로 변환
-  return labColor.l > 50 ? "#000000" : "#FFFFFF";  // 명도(l)가 50 이상이면 검은색, 아니면 흰색 반환
+  const labColor = d3.lab(color); // 입력된 색상을 LAB 색상 공간으로 변환
+  return labColor.l > 50 ? '#000000' : '#FFFFFF'; // 명도(l)가 50 이상이면 검은색, 아니면 흰색 반환
 }
 
+/** 부모 요소 추출 */
 export function getParent<T extends SVGElement>(ref: MutableRefObject<T>): HTMLDivElement | null {
   return ref.current?.parentElement as HTMLDivElement;
+}
+
+/**
+ * Tree flatten
+ * dfs대신 원본 데이터 배열에서 탐색하여 반환
+ * */
+export function getAllChildren({ data, depth }: d3.HierarchyNode<WineData | Tree>, csvData: WineData[]) {
+  if (depth === 0) return csvData;
+  if ('name' in data) {
+    const { name } = data;
+    return csvData.filter((d) => COLUMNS.some((col) => d[col] === name));
+  } else {
+    return [data];
+  }
 }

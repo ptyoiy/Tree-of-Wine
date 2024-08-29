@@ -1,12 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ToggleButton } from '@mui/material';
 import * as d3 from 'd3';
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { wineSelectionAtom } from '../../../recoil/search';
+import { wineCsvDataSelector } from '../../../recoil/wineData';
 import { Tree, WineData } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
 import { Size } from '../wrapper/Wrapper';
-import { render, setLayout } from './render';
+import { render, setInteraction, setLayout } from './render';
 
 type RadialDendrogramProps = {
   fontSize: number;
@@ -49,7 +53,12 @@ export default function RadialDendrogram(props: RadialDendrogramProps) {
 
 function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
   const [fittingToTheEnd, setFittingToTheEnd] = useState(false);
-  const handleToggleChange = () => setFittingToTheEnd(!fittingToTheEnd);
+  const handleToggleChange = useCallback(
+    () => setFittingToTheEnd(!fittingToTheEnd),
+    [fittingToTheEnd]
+  );
+  const [selection, setSelection] = useRecoilState(wineSelectionAtom);
+  const csvData = useRecoilValue(wineCsvDataSelector);
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
   const { nodeData, linkData, width } = useChartData(data, size!, fittingToTheEnd);
@@ -57,8 +66,11 @@ function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
   useEffect(() => {
     setLayout(svgRef, width, fontSize);
     render(svgRef, nodeData, linkData, onMouseOver, onMouseOut);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fittingToTheEnd]);
+
+  useEffect(() => {
+    setInteraction(svgRef, selection, setSelection, csvData);
+  }, [selection])
 
   return {
     svgRef,

@@ -1,4 +1,4 @@
-export type WineData = {
+export type csvWineData = {
   Appellation: string;
   Country: string;
   Designation: string;
@@ -6,7 +6,12 @@ export type WineData = {
   Latitude: string;
   Longitude: string;
   Region: string;
-  id: string
+};
+
+export type WineData = csvWineData & {
+  id: string;
+  group: string;
+  values: string;
 };
 
 export type Tree = {

@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import { color, getCountryAtTreeOfWine } from '../../../utils/chartUtils';
+import { SetterOrUpdater } from 'recoil';
+import { color, getAllChildren, getCountryAtTreeOfWine } from '../../../utils/chartUtils';
+import { toggleSelection } from '../../../utils/dataUtils';
 import { Tree, WineData, isChildrenTree } from '../../../utils/makeTree';
 import { mainChartTransform } from './constant';
 
@@ -27,13 +29,7 @@ export function render(
     .selectAll('g')
     .data(nodeData)
     .join('g')
-    .attr('transform', (d) => `rotate(${(d.x! * 180) / Math.PI - 90}) translate(${d.y},0)`);
-
-  node
-    .append('circle')
-    .attr('cursor', 'pointer')
-    .attr('fill', (d) => (d.depth === 0 ? '#555' : color(getCountryAtTreeOfWine(d))))
-    .attr('r', r)
+    .attr('transform', (d) => `rotate(${(d.x! * 180) / Math.PI - 90}) translate(${d.y},0)`)
     .on('mousemove', (e, d) => {
       if ('Country' in d.data) onMouseOver(e, d.data);
     })
@@ -42,17 +38,17 @@ export function render(
     });
 
   node
+    .append('circle')
+    .attr('cursor', 'pointer')
+    .attr('fill', (d) => (d.depth === 0 ? '#555' : color(getCountryAtTreeOfWine(d))))
+    .attr('r', r);
+
+  node
     .append('text')
     .attr('dy', '0.31em')
     .attr('x', (d) => (d.x! < Math.PI === !d.children ? 6 : -6))
     .attr('text-anchor', (d) => (d.x! < Math.PI === !d.children ? 'start' : 'end'))
     .attr('transform', (d) => (d.x! >= Math.PI ? 'rotate(180)' : null))
-    .on('mousemove', (e, d) => {
-      if ('Country' in d.data) onMouseOver(e, d.data);
-    })
-    .on('mouseout', (_e, d) => {
-      if ('Country' in d.data) onMouseOut();
-    })
     .text((d) => {
       if (isChildrenTree(d.data)) {
         return d.data.name;
@@ -106,4 +102,19 @@ export function setLayout(svgRef: MutableRefObject<SVGSVGElement>, size: number,
     .attr('class', 'node-group')
     .attr('stroke-linejoin', 'round')
     .attr('stroke-width', 3);
+}
+
+export function setInteraction(
+  svgRef: MutableRefObject<SVGSVGElement>,
+  selection: Set<WineData>,
+  setSelection: SetterOrUpdater<Set<WineData>>,
+  csvData: WineData[]
+) {
+  const nodes = d3.select(svgRef.current).select('g.node-group');
+  nodes
+    .selectAll<SVGCircleElement, d3.HierarchyNode<WineData | Tree>>('circle')
+    .on('click', (_e, d) => {
+      const newSelection = new Set(getAllChildren(d, csvData));
+      toggleSelection(selection, newSelection, setSelection);
+    });
 }

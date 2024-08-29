@@ -12,8 +12,8 @@ import {
 import { useCallback, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { wineSelectionAtom, wineSelectionSelector } from '../../../recoil/search';
-import { Rows } from '../../../recoil/table';
-const columns: GridColDef<Rows[][number]>[] = [
+import { WineData } from '../../../utils/makeTree';
+const columns: GridColDef<WineData[][number]>[] = [
   { field: 'Country', headerName: 'Country', width: 90 },
   {
     field: 'Region',
@@ -59,40 +59,38 @@ export default function Table() {
   }, [selectedRows]);
 
   return (
-    <>
-      <DataGrid
-        sx={{ height: `33%` }}
-        density="compact"
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
+    <DataGrid
+      sx={{ height: `33%` }}
+      density="compact"
+      rows={rows}
+      columns={columns}
+      initialState={{
+        pagination: {
+          paginationModel: {
+            pageSize: 5,
           },
-        }}
-        slots={{
-          pagination() {
-            return (
-              <div style={{ display: 'flex' }}>
-                <Button
-                  sx={{ minWidth: 'fit-content', padding: 0 }}
-                  disabled={!selectedRows.length}
-                  onClick={handleDelete}
-                >
-                  <DeleteIcon />
-                </Button>
-                <GridPagination />
-              </div>
-            );
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-        onRowSelectionModelChange={handleRowSelection}
-      />
-    </>
+        },
+      }}
+      slots={{
+        pagination() {
+          return (
+            <div style={{ display: 'flex' }}>
+              <Button
+                sx={{ minWidth: 'fit-content', padding: 0 }}
+                disabled={!selectedRows.length}
+                onClick={handleDelete}
+              >
+                <DeleteIcon />
+              </Button>
+              <GridPagination />
+            </div>
+          );
+        },
+      }}
+      pageSizeOptions={[5]}
+      checkboxSelection
+      disableRowSelectionOnClick
+      onRowSelectionModelChange={handleRowSelection}
+    />
   );
 }

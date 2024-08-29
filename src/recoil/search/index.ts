@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import { WineData } from '../../utils/makeTree';
 
-export const wineSelectionAtom = atom<Set<WineData & { group: string; values: string }>>({
+export const wineSelectionAtom = atom<Set<WineData>>({
   key: 'wineSelectionAtom',
   default: new Set(),
 });
