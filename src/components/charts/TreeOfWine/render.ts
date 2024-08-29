@@ -111,10 +111,43 @@ export function setInteraction(
   csvData: WineData[]
 ) {
   const nodes = d3.select(svgRef.current).select('g.node-group');
+  const time = 2000;
   nodes
     .selectAll<SVGCircleElement, d3.HierarchyNode<WineData | Tree>>('circle')
-    .on('click', (_e, d) => {
+    .on('mousedown', function (_e, d) {
       const newSelection = new Set(getAllChildren(d, csvData));
-      toggleSelection(selection, newSelection, setSelection);
+      if (!d.children) {
+        toggleSelection(selection, newSelection, setSelection);
+        return;
+      }
+      const circle = d3.select(this);
+      const timeout = setTimeout(() => {
+        toggleSelection(selection, newSelection, setSelection);
+        circle
+          .interrupt()
+          .attr('stroke', null)
+          .attr('stroke-width', null)
+          .attr('stroke-dasharray', null);
+      }, time / 2 - 450);
+      circle
+        .attr('stroke', 'red')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '0 100')
+        .transition()
+        .duration(time)
+        .attr('stroke-dasharray', '100 0')
+        .ease(d3.easeLinear)
+        .end()
+        .catch(() => {
+          clearTimeout(timeout);
+        });
+    })
+    .on('mouseup', function () {
+      const circle = d3.select(this);
+      circle
+        .interrupt()
+        .attr('stroke', null)
+        .attr('stroke-width', null)
+        .attr('stroke-dasharray', null);
     });
 }
