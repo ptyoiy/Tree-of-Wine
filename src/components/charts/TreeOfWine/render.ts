@@ -17,7 +17,7 @@ export function render(
     .linkRadial<d3.HierarchyLink<Tree | WineData>, d3.HierarchyNode<Tree | WineData>>()
     .angle((d) => d.x!)
     .radius((d) => d.y!);
-  const r = 3;
+  const r = 4;
   const svg = d3.select(svgRef.current);
   const g = svg.select('g.mouse-up');
   const linkGroup = g.select('g.link-group');
