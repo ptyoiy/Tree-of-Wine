@@ -3,9 +3,8 @@
 import { ToggleButton } from '@mui/material';
 import * as d3 from 'd3';
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { wineSelectionAtom } from '../../../recoil/search';
-import { wineCsvDataSelector } from '../../../recoil/wineData';
 import { Tree, WineData } from '../../../utils/makeTree';
 import RotateSlider from '../../layout/Slider';
 import { Tooltip, useTooltip } from '../../layout/tooltip';
@@ -58,7 +57,6 @@ function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
     [fittingToTheEnd]
   );
   const [selection, setSelection] = useRecoilState(wineSelectionAtom);
-  const csvData = useRecoilValue(wineCsvDataSelector);
   const svgRef = useRef() as MutableRefObject<SVGSVGElement>;
   const { tooltipContent, tooltipVisible, tooltipCoords, onMouseOver, onMouseOut } = useTooltip();
   const { nodeData, linkData, width } = useChartData(data, size!, fittingToTheEnd);
@@ -69,7 +67,7 @@ function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
   }, [fittingToTheEnd]);
 
   useEffect(() => {
-    setInteraction(svgRef, selection, setSelection, csvData);
+    setInteraction(svgRef, selection, setSelection);
   }, [selection])
 
   return {

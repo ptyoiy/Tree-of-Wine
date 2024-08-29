@@ -45,6 +45,7 @@ export function render(
 
   node
     .append('text')
+    .attr('class', 'text')
     .attr('dy', '0.31em')
     .attr('x', (d) => (d.x! < Math.PI === !d.children ? 6 : -6))
     .attr('text-anchor', (d) => (d.x! < Math.PI === !d.children ? 'start' : 'end'))
@@ -59,6 +60,7 @@ export function render(
     .filter((d) => isChildrenTree(d.data))
     .clone(true)
     .lower()
+    .attr('class', 'text-border')
     .attr('stroke', 'white');
 }
 
@@ -107,28 +109,46 @@ export function setLayout(svgRef: MutableRefObject<SVGSVGElement>, size: number,
 export function setInteraction(
   svgRef: MutableRefObject<SVGSVGElement>,
   selection: Set<WineData>,
-  setSelection: SetterOrUpdater<Set<WineData>>,
-  csvData: WineData[]
+  setSelection: SetterOrUpdater<Set<WineData>>
 ) {
   const nodes = d3.select(svgRef.current).select('g.node-group');
   const time = 2000;
+  /** 선택 리스트 강조 갱신 */
+  nodes.selectAll<SVGTextElement, d3.HierarchyNode<WineData>>('text.text')
+    .attr('font-weight', null)
+    .filter(node => selection.has(node.data))
+    .attr('font-weight', 'bold')
+
+  /** event handler 갱신 */
   nodes
     .selectAll<SVGCircleElement, d3.HierarchyNode<WineData | Tree>>('circle')
-    .on('mousedown', function (_e, d) {
-      const newSelection = new Set(getAllChildren(d, csvData));
+    .on('mousedown', function ({ target }: MouseEvent, d) {
+      const circle = d3.select(this);
+      const text = d3
+        .select((target as SVGCircleElement).parentElement)
+        .select<SVGTextElement>('text.text');
+      const fontWeight = text.attr('font-weight');
+      const newSelection = new Set(getAllChildren(d));
+
+      // leaf node일 때
       if (!d.children) {
         toggleSelection(selection, newSelection, setSelection);
+        text.attr('font-weight', fontWeight ? null : 'bold');
         return;
       }
-      const circle = d3.select(this);
+
+      // internal node일 때
       const timeout = setTimeout(() => {
         toggleSelection(selection, newSelection, setSelection);
+        // delay 효과 제거
         circle
           .interrupt()
           .attr('stroke', null)
           .attr('stroke-width', null)
           .attr('stroke-dasharray', null);
       }, time / 2 - 450);
+
+      // delay 효과 애니메이션
       circle
         .attr('stroke', 'red')
         .attr('stroke-width', 2)

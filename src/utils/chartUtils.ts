@@ -1,7 +1,6 @@
 /* eslint-disable no-var */
 import * as d3 from 'd3';
 import { MutableRefObject } from 'react';
-import { COLUMNS } from '../recoil/wineData';
 import { Tree, WineData } from './makeTree';
 
 export const color = d3
@@ -48,12 +47,6 @@ export function getParent<T extends SVGElement>(ref: MutableRefObject<T>): HTMLD
  * Tree flatten
  * dfs대신 원본 데이터 배열에서 탐색하여 반환
  * */
-export function getAllChildren({ data, depth }: d3.HierarchyNode<WineData | Tree>, csvData: WineData[]) {
-  if (depth === 0) return csvData;
-  if ('name' in data) {
-    const { name } = data;
-    return csvData.filter((d) => COLUMNS.some((col) => d[col] === name));
-  } else {
-    return [data];
-  }
+export function getAllChildren(d: d3.HierarchyNode<WineData | Tree>) {
+  return d.descendants().filter(node => !node.children).map(node => node.data as WineData);
 }
