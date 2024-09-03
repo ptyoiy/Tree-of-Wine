@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { Search } from '../search';
 import { Table } from '../table';
+import Virtualize from '../search/ListBox';
 
 const LeftSection = () => {
   return (
@@ -14,7 +15,8 @@ const LeftSection = () => {
       }}
     >
       <Search />
-      <Table />
+      {/* <Table /> */}
+      <Virtualize />
     </Box>
   );
 };

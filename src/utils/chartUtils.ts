@@ -5,8 +5,17 @@ import { Tree, WineData } from './makeTree';
 
 export const color = d3
   .scaleOrdinal<string>()
-  .domain(['France', 'Spain', 'Italy'])
-  .range(['#0055A4', '#FFD700', '#008C45']);
+  .domain(['France', 'Spain', 'Italy', 'Portugal', 'Germany', 'Argentina', 'Chile', 'Australia'])
+  .range([
+    '#0055A4', // France: Blue from the French flag
+    '#FFD700', // Spain: Gold from the Spanish flag
+    '#008C45', // Italy: Green from the Italian flag
+    '#FF5E00', // Portugal: Orange from the Portuguese flag
+    '#000000', // Germany: Black from the German flag
+    '#74ACDF', // Argentina: Light blue from the Argentine flag
+    '#D52B1E', // Chile: Red from the Chilean flag
+    '#FFCC00'  // Australia: Gold from the Australian flag
+  ]);
 
 /** node의 Country를 찾아 반환하는 함수
  * @variation depth 0 ~ n

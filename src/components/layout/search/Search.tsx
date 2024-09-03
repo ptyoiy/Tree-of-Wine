@@ -8,7 +8,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchTextAtom, wineSelectionAtom, wineSelectionSelector } from '../../../recoil/search';
 import { wineCsvDataSelector } from '../../../recoil/wineData';
 import { toggleSelection } from '../../../utils/dataUtils';
-import { checkedIcon, GroupHeader, GroupItems, icon } from './style';
+import { CheckedIcon, GroupHeader, GroupItems, Icon } from './style';
 
 export default function RenderGroup() {
   const {
@@ -49,6 +49,7 @@ export default function RenderGroup() {
         />
       )}
       renderGroup={(params) => {
+        console.log({ params });
         const [country, region] = params.group.split(',');
         return (
           <li key={params.key}>
@@ -71,6 +72,9 @@ export default function RenderGroup() {
           </li>
         );
       }}
+      // ListboxComponent={(props) => {
+        
+      // }}
       renderOption={(props, option, { selected }) => {
         // 검색어 하이라이팅을 위한 텍스트 분할 및 하이라이팅
         const highlightText = (text: string, query: string) => {
@@ -87,8 +91,8 @@ export default function RenderGroup() {
         return (
           <li key={id} {...optionProps}>
             <Checkbox
-              icon={icon}
-              checkedIcon={checkedIcon}
+              icon={<Icon />}
+              checkedIcon={<CheckedIcon />}
               style={{ marginRight: 8 }}
               checked={selected}
             />
