@@ -1,4 +1,5 @@
 // src/recoil/wineData.ts
+import { hierarchy, HierarchyNode } from 'd3';
 import Papa from 'papaparse';
 import { selector } from 'recoil';
 import { csvWineData, makeTree, Tree, WineData } from '../../utils/makeTree';
@@ -15,12 +16,14 @@ export const wineCsvDataSelector = selector<WineData[]>({
       const result = await reader?.read();
       const decoder = new TextDecoder('utf-8');
       const csv = decoder.decode(result?.value);
-      const parsedData: WineData[] = Papa.parse<csvWineData>(csv, { header: true }).data.map((d, i) => ({
-        ...d,
-        id: i.toString(),
-        group: `${d.Country},${d.Region}`,
-        values: Object.values(d).join(''),
-      }));
+      const parsedData: WineData[] = Papa.parse<csvWineData>(csv, { header: true }).data.map(
+        (d, i) => ({
+          ...d,
+          id: i.toString(),
+          group: `${d.Country},${d.Region}`,
+          values: Object.values(d).join(''),
+        })
+      );
       parsedData.sort((a, b) => {
         const countryComparison = a.Country.localeCompare(b.Country);
         return countryComparison !== 0 ? countryComparison : a.Region.localeCompare(b.Region);
@@ -33,12 +36,13 @@ export const wineCsvDataSelector = selector<WineData[]>({
   },
 });
 
-export const treeDataSelector = selector<WineData | Tree>({
+export const treeDataSelector = selector<HierarchyNode<WineData | Tree>>({
   key: 'treeDataSelector',
   get: ({ get }) => {
     const csvData = get(wineCsvDataSelector);
     const treeData = makeTree(csvData, ...COLUMNS);
-    console.log(treeData);
-    return treeData;
+    const hier = hierarchy(treeData);
+    return hier.copy();
   },
+  dangerouslyAllowMutability: true,
 });

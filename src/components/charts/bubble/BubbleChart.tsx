@@ -7,7 +7,7 @@ import { Size } from '../wrapper';
 import { renderBubbleChart, setLayout } from './render';
 
 type BubbleChartProps = {
-  data: WineData | Tree;
+  data: d3.HierarchyNode<WineData | Tree>;
   size?: Size;
 };
 export default function BubbleChart(props: BubbleChartProps) {
@@ -56,7 +56,7 @@ function useRenderChart({ data, size }: BubbleChartProps) {
   };
 }
 
-function useChartData(data: WineData | Tree) {
+function useChartData(data: d3.HierarchyNode<WineData | Tree>) {
   const pack = useMemo(() => {
     return d3.pack<Tree | WineData>().padding(3);
   }, []);
@@ -64,8 +64,7 @@ function useChartData(data: WineData | Tree) {
   const originTree = useMemo(
     () =>
       pack(
-        d3
-          .hierarchy(data)
+        data
           .count()
           .sort((a, b) => b.value! - a.value!)
       ),
