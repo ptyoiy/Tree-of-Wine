@@ -10,7 +10,15 @@ import {
   styled,
   Theme,
 } from '@mui/material';
-import { memo, MouseEvent, ReactElement, useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import {
+  memo,
+  MouseEvent,
+  ReactElement,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useRecoilState } from 'recoil';
 import { groupCheckboxState } from '../../../recoil/search';
 import { Tree, WineData } from '../../../utils/makeTree';
@@ -38,7 +46,10 @@ type RenderGroupProps = {
   keyBoundaries: number[];
   searchText: string;
   theme: Theme;
-  handleGroupSelect: (group: ReactElement[], region: string) => "checked" | "indeterminate" | undefined;
+  handleGroupSelect: (
+    group: ReactElement[],
+    region: string
+  ) => 'checked' | 'indeterminate' | undefined;
 };
 
 export function RenderGroup({
@@ -144,14 +155,19 @@ export function RenderOption({
     onClick!(event);
     let value: 'checked' | 'indeterminate' | undefined;
     if (groupState === 'checked' || groupState === undefined) {
-      value = 'indeterminate';
-    } else {
-      const groupSet = new Set(groupData.children);
-      const diffSize = groupSet.difference(selection).size;
-      if (selected) {
-        value = groupSet.size - diffSize == 1 ? undefined : 'indeterminate';
+      if (groupData.children.length > 1) {
+        value = 'indeterminate';
       } else {
-        const isAllChecked = diffSize == 1;
+        value = selected ? undefined : 'checked';
+      }
+    } else {
+      // groupState === 'indeterminate'
+      const groupSet = new Set(groupData.children);
+      const interSectionSize = groupSet.intersection(selection).size;
+      if (selected) {
+        value = interSectionSize == 1 ? undefined : 'indeterminate';
+      } else {
+        const isAllChecked = interSectionSize + 1 == groupSet.size;
         value = isAllChecked ? 'checked' : 'indeterminate';
       }
     }

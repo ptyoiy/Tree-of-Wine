@@ -32,8 +32,7 @@ export default function Search() {
   } = useSearch();
   return (
     <Autocomplete
-      id="grouped-demo"
-      sx={{ width: '100%', padding: '8px 0' }}
+      sx={{ padding: '8px 0' }}
       value={selectionArray}
       inputValue={searchText}
       options={data}
@@ -41,7 +40,6 @@ export default function Search() {
       getOptionLabel={(option) => option.values}
       disableCloseOnSelect
       multiple
-      fullWidth
       onChange={(_event, value, reason) => {
         if (reason === 'clear') resetGroupState();
         setSelection(new Set(value));
@@ -55,7 +53,6 @@ export default function Search() {
           label={selection.size ? `Selected ${selection.size} items` : 'Search'}
           InputProps={{ ...params.InputProps, startAdornment: null }}
           onChange={(event) => {
-            console.log('onchange');
             setSearchText(event.target.value);
           }}
         />
@@ -127,6 +124,7 @@ function useSearch() {
     const isUnion = alreadySelected.size;
     const nextSelection = selection[isUnion ? 'union' : 'difference'](newSelection);
     setSelection(nextSelection);
+
     const intersectionSize = nextSelection.intersection(groupDataSet).size;
     if (intersectionSize == groupDataSet.size) return 'checked';
     if (intersectionSize) return 'indeterminate';

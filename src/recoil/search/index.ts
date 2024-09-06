@@ -48,4 +48,3 @@ export const groupCheckboxState = selectorFamily({
       set(groupIds, (prev) => new Set([...prev, group]));
     },
 });
-

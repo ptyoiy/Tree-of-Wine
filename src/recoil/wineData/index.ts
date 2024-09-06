@@ -42,7 +42,7 @@ export const treeDataSelector = selector<HierarchyNode<WineData | Tree>>({
     const csvData = get(wineCsvDataSelector);
     const treeData = makeTree(csvData, ...COLUMNS);
     const hier = hierarchy(treeData);
-    return hier.copy();
+    return hier;
   },
   dangerouslyAllowMutability: true,
 });

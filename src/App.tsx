@@ -25,7 +25,7 @@ function App() {
         }}
       >
         <LeftSection />
-        {/* <MainSection /> */}
+        <MainSection />
         <RightSection />
       </Container>
     </>

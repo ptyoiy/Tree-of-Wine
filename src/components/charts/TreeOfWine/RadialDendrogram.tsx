@@ -68,7 +68,7 @@ function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
 
   useEffect(() => {
     setInteraction(svgRef, selection, setSelection);
-  }, [selection])
+  }, [selection]);
 
   return {
     svgRef,
@@ -80,16 +80,20 @@ function useRenderChart({ data, size, fontSize }: RadialDendrogramProps) {
   };
 }
 
-function useChartData(data: d3.HierarchyNode<WineData | Tree>, { width }: Size, fittingToTheEnd: boolean) {
+function useChartData(
+  data: d3.HierarchyNode<WineData | Tree>,
+  { width }: Size,
+  fittingToTheEnd: boolean
+) {
   const { nodeData, linkData } = useMemo(() => {
     let tree: d3.HierarchyNode<Tree | WineData>;
     const radius = width / 2 - 250; // 250: padding for chart size
     if (fittingToTheEnd) {
       const treeConstructor = d3.cluster<Tree | WineData>().size([2 * Math.PI, radius]);
-      const hierarchy = data.sort((a, b) => a.height - b.height);
+      const hierarchy = data.copy().sort((a, b) => a.height - b.height);
       tree = treeConstructor(hierarchy);
     } else {
-      tree = data.sort((a, b) => a.height - b.height);
+      tree = data.copy().sort((a, b) => a.height - b.height);
       d3
         .tree<Tree | WineData>()
         .size([2 * Math.PI, radius])
