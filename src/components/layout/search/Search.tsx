@@ -4,8 +4,14 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { HierarchyNode } from 'd3';
 import { ReactElement, useMemo } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { searchTextAtom, wineSelectionAtom, wineSelectionSelector } from '../../../recoil/search';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
+import {
+  groupIds,
+  groupState,
+  searchTextAtom,
+  wineSelectionAtom,
+  wineSelectionSelector,
+} from '../../../recoil/search';
 import { treeDataSelector, wineCsvDataSelector } from '../../../recoil/wineData';
 import { Tree } from '../../../utils/makeTree';
 import { RenderGroup, RenderOption, RenderOptionProps } from './style';
@@ -14,6 +20,7 @@ export default function Search() {
   const {
     tree,
     theme,
+    resetGroupState,
     selection,
     selectionArray,
     setSelection,
@@ -35,7 +42,8 @@ export default function Search() {
       disableCloseOnSelect
       multiple
       fullWidth
-      onChange={(_event, value) => {
+      onChange={(_event, value, reason) => {
+        if (reason === 'clear') resetGroupState();
         setSelection(new Set(value));
       }}
       onClose={() => {
@@ -85,6 +93,7 @@ function useSearch() {
   const data = useRecoilValue(wineCsvDataSelector);
   const tree = useRecoilValue(treeDataSelector);
   const selectionArray = useRecoilValue(wineSelectionSelector);
+  const groupList = useRecoilValue(groupIds);
   const [selection, setSelection] = useRecoilState(wineSelectionAtom);
   const [searchText, setSearchText] = useRecoilState(searchTextAtom);
   const theme = useTheme() as Theme;
@@ -103,7 +112,7 @@ function useSearch() {
 
   /**
    * @param group react children
-   * @returns {"checked" | "indeterminate" | undefined} 
+   * @returns {"checked" | "indeterminate" | undefined}
    ** checked: 전부 선택
    ** indeterminate: 일부 선택
    ** undefined: 선택 안됨
@@ -124,11 +133,18 @@ function useSearch() {
     return undefined;
   };
 
+  const resetGroupState = useRecoilCallback(({ reset }) => () => {
+    groupList.forEach((id) => {
+      reset(groupState(id));
+    });
+  });
+
   return {
     tree,
     theme,
     searchText,
     setSearchText,
+    resetGroupState,
     selection,
     selectionArray,
     setSelection,

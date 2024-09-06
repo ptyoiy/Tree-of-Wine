@@ -1,4 +1,4 @@
-import { atom, atomFamily, selector, selectorFamily } from 'recoil';
+import { atom, atomFamily, DefaultValue, selector, selectorFamily } from 'recoil';
 import { WineData } from '../../utils/makeTree';
 
 export const wineSelectionAtom = atom<Set<WineData>>({
@@ -25,18 +25,27 @@ export const groupState = atomFamily({
   default: undefined as 'checked' | 'indeterminate' | undefined,
 });
 
+export const groupIds = atom({
+  key: 'groupIds',
+  default: new Set<string>(),
+});
+
 // 그룹의 하위 리스트 상태를 기반으로 그룹의 체크박스 상태를 결정하는 selectorFamily
 export const groupCheckboxState = selectorFamily({
   key: 'groupCheckboxState',
   get:
-    (parent) =>
-    ({ get }) => {
-      const state = get(groupState(parent));
-      return state;
-    },
+    (group) =>
+    ({ get }) =>
+      get(groupState(group)),
   set:
-    (parent) =>
-    ({ set }, newValue) => {
-      set(groupState(parent), newValue);
+    (group: string) =>
+    ({ set, reset }, newValue) => {
+      if (newValue instanceof DefaultValue) {
+        reset(groupState(group));
+        set(groupIds, (prev) => prev.difference(new Set([group])));
+      }
+      set(groupState(group), newValue);
+      set(groupIds, (prev) => new Set([...prev, group]));
     },
 });
+
