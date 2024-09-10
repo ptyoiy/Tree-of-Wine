@@ -45,12 +45,14 @@ function loop(current: Tree, columns: (keyof WineData)[]) {
   const col = columns.shift();
   if (!col) return;
   (current.children as Tree[]).forEach((child: Tree) => {
+    console.log({child});
     child.children = buildNodes(child.children, col);
     loop(child, [...columns]);
   });
 }
 
 const buildNodes = (rows: (Tree | WineData)[], col: keyof WineData) => {
+  console.log({ rows, col });
   const groupBy = Object.groupBy(rows, (row: any) => row[col]);
   const entries = Object.entries(groupBy) as [string, WineData[]][];
   if (entries.length === 1 && entries[0][0] === '') {

@@ -1,0 +1,294 @@
+Country,State,Region,County,Designation
+USA,California,FAR NORTH,"HUMBOLDT, TRINITY COUNTY",Willow Creek
+USA,California,FAR NORTH,"SHASTA, TEHAMA COUNTY ",Inwood Valley
+USA,California,FAR NORTH,,Manton Valley
+USA,California,FAR NORTH,SISKIYOU COUNTY,Seiad Valley
+USA,California,FAR NORTH,TRINITY COUNTY ,Trinity Lakes
+USA,California,NORTH COAST,,North Coast
+USA,California,NORTH COAST,LAKE COUNTY,Benmore Valley
+USA,California,NORTH COAST,LAKE COUNTY,Big Valley District-Lake
+USA,California,NORTH COAST,LAKE COUNTY,Clear Lake
+USA,California,NORTH COAST,LAKE COUNTY,Guenoc Valley
+USA,California,NORTH COAST,LAKE COUNTY,High Valley
+USA,California,NORTH COAST,LAKE COUNTY,Kelsey Bench-Lake County
+USA,California,NORTH COAST,LAKE COUNTY,Long Valley-Lake County
+USA,California,NORTH COAST,LAKE COUNTY,Upper Lake Valley
+USA,California,NORTH COAST,LAKE COUNTY,Red Hills Lake County
+USA,California,NORTH COAST,MENDOCINO COUNTY,Anderson Valley
+USA,California,NORTH COAST,MENDOCINO COUNTY,Cole Ranch
+USA,California,NORTH COAST,MENDOCINO COUNTY,Comptche
+USA,California,NORTH COAST,MENDOCINO COUNTY,Covelo
+USA,California,NORTH COAST,MENDOCINO COUNTY,Dos Rios
+USA,California,NORTH COAST,MENDOCINO COUNTY,Eagle Peak Mendocino
+USA,California,NORTH COAST,MENDOCINO COUNTY,McDowell Valley
+USA,California,NORTH COAST,MENDOCINO COUNTY,Mendocino
+USA,California,NORTH COAST,MENDOCINO COUNTY,Mendocino Ridge
+USA,California,NORTH COAST,"MENDOCINO, SONOMA COUNTY",Pine Mountain-Cloverdale Peak
+USA,California,NORTH COAST,MENDOCINO COUNTY,Potter Valley
+USA,California,NORTH COAST,MENDOCINO COUNTY,Redwood Valley
+USA,California,NORTH COAST,MENDOCINO COUNTY,Yorkville Highlands
+USA,California,NORTH COAST,NAPA COUNTY,Napa Valley
+USA,California,NORTH COAST,NAPA COUNTY,Atlas Peak
+USA,California,NORTH COAST,NAPA COUNTY,Calistoga
+USA,California,NORTH COAST,NAPA COUNTY,Chiles Valley District
+USA,California,NORTH COAST,NAPA COUNTY,Coombsville
+USA,California,NORTH COAST,NAPA COUNTY,Diamond Mountain District
+USA,California,NORTH COAST,NAPA COUNTY,Howell Mountain
+USA,California,NORTH COAST,"NAPA, SONOMA COUNTY",Los Carneros
+USA,California,NORTH COAST,NAPA COUNTY,Mount Veeder
+USA,California,NORTH COAST,NAPA COUNTY,Oak Knoll District of Napa
+USA,California,NORTH COAST,NAPA COUNTY,Oakville
+USA,California,NORTH COAST,NAPA COUNTY,Rutherford
+USA,California,NORTH COAST,NAPA COUNTY,Spring Mountain District
+USA,California,NORTH COAST,NAPA COUNTY,St. Helena
+USA,California,NORTH COAST,NAPA COUNTY,Stags Leap District
+USA,California,NORTH COAST,"NAPA, SONOMA COUNTY",Wild Horse Valley
+USA,California,NORTH COAST,NAPA COUNTY,Yountville
+USA,California,NORTH COAST,SOLANO COUNTY,Solano County Green Valley
+USA,California,NORTH COAST,SOLANO COUNTY,Suisun Valley
+USA,California,NORTH COAST,SONOMA COUNTY,Alexander Valley
+USA,California,NORTH COAST,SONOMA COUNTY,Bennett Valley
+USA,California,NORTH COAST,SONOMA COUNTY,Chalk Hill
+USA,California,NORTH COAST,SONOMA COUNTY,Dry Creek Valley
+USA,California,NORTH COAST,SONOMA COUNTY,Fort Ross-Seaview
+USA,California,NORTH COAST,SONOMA COUNTY,Fountaingrove District
+USA,California,NORTH COAST,SONOMA COUNTY,Green Valley of Russian
+USA,California,NORTH COAST,SONOMA COUNTY,Knights Valley
+USA,California,NORTH COAST,SONOMA COUNTY,Moon Mountain District
+USA,California,NORTH COAST,SONOMA COUNTY,Northern Sonoma
+USA,California,NORTH COAST,"SONOMA, MARIN COUNTY",Petaluma Gap
+USA,California,NORTH COAST,SONOMA COUNTY,Rockpile
+USA,California,NORTH COAST,SONOMA COUNTY,Russian River Valley
+USA,California,NORTH COAST,SONOMA COUNTY,Sonoma Coast
+USA,California,NORTH COAST,SONOMA COUNTY,Sonoma Mountain
+USA,California,NORTH COAST,SONOMA COUNTY,Sonoma Valley
+USA,California,NORTH COAST,SONOMA COUNTY,West Sonoma Coast
+USA,California,CENTRAL COAST,,Central Coast
+USA,California,CENTRAL COAST,"ALAMEDA, CONTRA COSTA COUNTY",Livermore Valley
+USA,California,CENTRAL COAST,"ALAMEDA, CONTRA COSTA, SAN BENITO, SAN MATEO, SANTA CLARA, SANTA CRUZ, SANE FRANCISCO, SOLANO COUNTY",San Francisco Bay
+USA,California,CENTRAL COAST,CONTRA COSTA COUNTY,Contra Costa
+USA,California,CENTRAL COAST,CONTRA COSTA COUNTY,Lamorinda
+USA,California,CENTRAL COAST,MONTEREY COUNTY,Arroyo Seco
+USA,California,CENTRAL COAST,MONTEREY COUNTY,Carmel Valley
+USA,California,CENTRAL COAST,"MONTEREY, SAN BENITO COUNTY",Chalone
+USA,California,CENTRAL COAST,"MONTEREY, SAN BENITO COUNTY",Gabilan Mountains
+USA,California,CENTRAL COAST,MONTEREY COUNTY,Hames Valley
+USA,California,CENTRAL COAST,MONTEREY COUNTY,Monterey
+USA,California,CENTRAL COAST,MONTEREY COUNTY,San Antonio Valley
+USA,California,CENTRAL COAST,MONTEREY COUNTY,San Bernabe
+USA,California,CENTRAL COAST,MONTEREY COUNTY,San Lucas
+USA,California,CENTRAL COAST,MONTEREY COUNTY,Santa Lucia Highlands
+USA,California,CENTRAL COAST,SAN BENITO COUNTY,Cienega Valley
+USA,California,CENTRAL COAST,SAN BENITO COUNTY,Lime Kiln Valley
+USA,California,CENTRAL COAST,SAN BENITO COUNTY,Mt. Harlan
+USA,California,CENTRAL COAST,"SAN BENITO, SANTA CLARA COUNTY",Pacheco Pass
+USA,California,CENTRAL COAST,SAN BENITO COUNTY,Paicines
+USA,California,CENTRAL COAST,SAN BENITO COUNTY,San Benito
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Adelaida District
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Arroyo Grande Valley
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Creston District
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Edna Valley
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,El Pomar District
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Paso Robles
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Paso Robles Estrella
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Paso Robles Geneseo
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Paso Robles Highlands
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Paso Robles Willow Creek
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,San Juan Creek
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,San Miguel District
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Santa Margarita Ranch
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,SLO Coast
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,Templeton Gap District
+USA,California,CENTRAL COAST,SAN LUIS OBISPO,York Mountain
+USA,California,CENTRAL COAST,SANTA BARBARA COUNTY,Alisos Canyon
+USA,California,CENTRAL COAST,SANTA BARBARA COUNTY,Ballard Canyon
+USA,California,CENTRAL COAST,SANTA BARBARA COUNTY,Happy Canyon of Santa
+USA,California,CENTRAL COAST,SANTA BARBARA COUNTY,Los Olivos District
+USA,California,CENTRAL COAST,"SANTA BARBARA, SAN LUIS OBISPO COUNTY",Santa Maria Valley
+USA,California,CENTRAL COAST,SANTA BARBARA COUNTY,Santa Ynez Valley
+USA,California,CENTRAL COAST,SANTA BARBARA COUNTY,Sta. Rita Hills
+USA,California,CENTRAL COAST,SANTA CLARA COUNTY,San Ysidro District
+USA,California,CENTRAL COAST,"SANTA CLARA, ALAMEDA, SAN BENITO, SAN MATEO COUNTY",Santa Clara Valley
+USA,California,CENTRAL COAST,SANTA CRUZ COUNTY,Ben Lomond Mountain
+USA,California,CENTRAL COAST,"SANTA CRUZ, SAN MATEO, SANTA CLARA COUNTY",Santa Cruz Mountains
+USA,California,INLAND VALLEYS,FRESNO COUNTY ,Squaw Valley-Miramonte
+USA,California,INLAND VALLEYS,KERN COUNTY,Tehachapi Mountains
+USA,California,INLAND VALLEYS,"MADERA, FRESNO COUNTY",Madera
+USA,California,INLAND VALLEYS,SACRAMENTO COUNTY,Alta Mesa
+USA,California,INLAND VALLEYS,"SACRAMENTO, SAN JOAQUIN COUNTY",Borden Ranch
+USA,California,INLAND VALLEYS,SACRAMENTO COUNTY,Cosumnes River
+USA,California,INLAND VALLEYS,SACRAMENTO COUNTY,Sloughhouse
+USA,California,INLAND VALLEYS,SAN JOAQUIN COUNTY,Clements Hills
+USA,California,INLAND VALLEYS,"SAN JOAQUIN, SACRAMENTO COUNTY",Jahant
+USA,California,INLAND VALLEYS,"SAN JOAQUIN, SACRAMENTO COUNTY",Lodi
+USA,California,INLAND VALLEYS,SAN JOAQUIN COUNTY,Mokelumne River
+USA,California,INLAND VALLEYS,SAN JOAQUIN COUNTY,River Junction
+USA,California,INLAND VALLEYS,"SAN JOAQUIN, STANISLAUS COUNTY",Tracy Hills
+USA,California,INLAND VALLEYS,STANISLAUS COUNTY ,Diablo Grande
+USA,California,INLAND VALLEYS,STANISLAUS COUNTY ,Paulsell Valley
+USA,California,INLAND VALLEYS,STANISLAUS COUNTY ,Salado Creek
+USA,California,INLAND VALLEYS,YOLO COUNTY,Capay Valley
+USA,California,INLAND VALLEYS,"YOLO, SACRAMENTO, SOLANO COUNTY",Clarksburg
+USA,California,INLAND VALLEYS,YOLO COUNTY,Dunnigan Hills
+USA,California,INLAND VALLEYS,YOLO COUNTY,Merritt Island
+USA,California,INLAND VALLEYS,"YOLO, SOLANO COUNTY",Winters Highlands
+USA,California,SIERRA FOOTHILLS,YOLO COUNTY,Sierra Foothills
+USA,California,SIERRA FOOTHILLS,"AMADOR, EL DORADO COUNTY",California Shenandoah
+USA,California,SIERRA FOOTHILLS,AMADOR COUNTY,Fiddletown
+USA,California,SIERRA FOOTHILLS,EL DORADO COUNTY,El Dorado
+USA,California,SIERRA FOOTHILLS,EL DORADO COUNTY,Fair Play
+USA,California,SIERRA FOOTHILLS,YUBA COUNTY,North Yuba
+USA,California,SOUTHERN CALIFORNIA,,South Coast
+USA,California,SOUTHERN CALIFORNIA,"LOS ANGELES, KERN COUNTY",Antelope Valley of the
+USA,California,SOUTHERN CALIFORNIA,LOS ANGELES COUNTY,Leona Valley
+USA,California,SOUTHERN CALIFORNIA,"LOS ANGELES, VENTURA COUNTY",Malibu Coast
+USA,California,SOUTHERN CALIFORNIA,LOS ANGELES COUNTY,Malibu-Newton Canyon
+USA,California,SOUTHERN CALIFORNIA,LOS ANGELES COUNTY,Saddle Rock-Malibu
+USA,California,SOUTHERN CALIFORNIA,LOS ANGELES COUNTY,Palos Verdes Peninsula
+USA,California,SOUTHERN CALIFORNIA,LOS ANGELES COUNTY,Sierra Pelona Valley
+USA,California,SOUTHERN CALIFORNIA,"SAN BERNADINO, RIVERSIDE COUNTY",Cucamonga Valley
+USA,California,SOUTHERN CALIFORNIA,RIVERSIDE COUNTY,Yucaipa Valley
+USA,California,SOUTHERN CALIFORNIA,RIVERSIDE COUNTY,Temecula Valley
+USA,California,SOUTHERN CALIFORNIA,SAN DIEGO,Ramona Valley
+USA,California,SOUTHERN CALIFORNIA,SAN DIEGO,San Pasqual Valley
+USA,ARIZONA,,,Sonoita
+USA,ARIZONA,,,Willcox
+USA,ARIZONA,,,Verde Valley
+USA,ARKANSAS,,,Altus
+USA,ARKANSAS,,,Arkansas Mountain
+USA,Bell Mountain,,,Bell Mountain
+USA,Bell Mountain,,,Fredericksburg in the Texas Hill Country
+USA,Bell Mountain,,,Texas Hill Country
+USA,Bell Mountain,,,Escondido Valley
+USA,Bell Mountain,,,Texas High Plains
+USA,Bell Mountain,,,Texas Davis Mountains
+USA,Bell Mountain,,,Texoma
+USA,COLORADO,,,Grand Valley
+USA,COLORADO,,,West Elks
+USA,CONNECTICUT,,,Western Connecticut Highlands
+USA,CONNECTICUT,,,Eastern Connecticut Highlands
+USA,GEORGIA,,,Dahlonega Plateau
+USA,Hawaii,,,Ulupalakua
+USA,IDAHO,,,Eagle Foothills
+USA,ILLINOIS,,,Shawnee Hills
+USA,INDIANA,,,Indiana Uplands
+USA,MARYLAND,,,Linganore
+USA,MARYLAND,,,Catoctin
+USA,MASSACHUSETTS,,,Martha’s Vineyard
+USA,MICHIGAN,,,Fennville
+USA,MICHIGAN,,,Leelanau Peninsula
+USA,MICHIGAN,,,Lake Michigan Shore
+USA,MICHIGAN,,,Old Mission Peninsula
+USA,MICHIGAN,,,Tip of the Mitt
+USA,MINNESOTA,,,Alexandria Lakes
+USA,MISSOURI,,,Augusta
+USA,MISSOURI,,,Hermann
+USA,MISSOURI,,,Ozark Highlands
+USA,NEW JERSEY,,,Warren Hills
+USA,NEW JERSEY,,,Outer Coastal Plain
+USA,NEW JERSEY,,,Cape May Peninsula
+USA,NEW MEXICO,,,Mimbres Valley
+USA,NEW MEXICO,,,Middle Rio Grande Valley
+USA,NEW YORK,,,Hudson River Region
+USA,NEW YORK,,,Finger Lakes
+USA,NEW YORK,,,"The Hamptons, Long Island"
+USA,NEW YORK,,,North Fork of Long Island
+USA,NEW YORK,,,Cayuga Lake
+USA,NEW YORK,,,Long Island
+USA,NEW YORK,,,Seneca Lake
+USA,NEW YORK,,,Niagara Escarpment
+USA,NEW YORK,,,Champlain Valley of New York
+USA,NEW YORK,,,Upper Hudson
+USA,NORTH CAROLINA,,,Yadkin Valley
+USA,NORTH CAROLINA,,,Swan Creek
+USA,NORTH CAROLINA,,,Haw River Valley
+USA,NORTH CAROLINA,,,Crest of the Blue Ridge Henderson County
+USA,OHIO,,,Isle St. George
+USA,OHIO,,,Loramie Creek
+USA,OHIO,,,Grand River Valley
+USA,OREGON,,,Willamette Valley
+USA,OREGON,,,Umpqua Valley
+USA,OREGON,,,Rogue Valley
+USA,OREGON,,,Applegate Valley
+USA,OREGON,,,Dundee Hills
+USA,OREGON,,,Southern Oregon
+USA,OREGON,,,Yamhill-Carlton
+USA,OREGON,,,McMinnville
+USA,OREGON,,,Ribbon Ridge
+USA,OREGON,,,"Red Hill Douglas County, Oregon"
+USA,OREGON,,,Eola-Amity Hills
+USA,OREGON,,,Chehalem Mountains
+USA,OREGON,,,"Elkton, OR"
+USA,OREGON,,,The Rocks District of Milton-Freewater
+USA,OREGON,,,Van Duzer Corridor
+USA,OREGON,,,Tualatin Hills
+USA,OREGON,,,Laurelwood District
+USA,OREGON,,,Lower Long Tom
+USA,OREGON,,,"Mt. Pisgah, Polk County, Oregon"
+USA,PENNSYLVANIA,,,Lancaster Valley
+USA,PENNSYLVANIA,,,Lehigh Valley
+USA,TENNESSEE,,,Upper Cumberland
+USA,VIRGINIA,,,Rocky Knob
+USA,VIRGINIA,,,North Fork of Roanoke
+USA,VIRGINIA,,,Monticello
+USA,VIRGINIA,,,Northern Neck George Washington Birthplace
+USA,VIRGINIA,,,Virginia’s Eastern Shore
+USA,VIRGINIA,,,"Middleburg, Virginia"
+USA,VIRGINIA,,,Virginia Peninsula
+USA,WASHINGTON,,,Yakima Valley
+USA,WASHINGTON,,,Puget Sound
+USA,WASHINGTON,,,Red Mountain
+USA,WASHINGTON,,,Horse Heaven Hills
+USA,WASHINGTON,,,Wahluke Slope
+USA,WASHINGTON,,,Rattlesnake Hills
+USA,WASHINGTON,,,Snipes Mountain
+USA,WASHINGTON,,,Lake Chelan
+USA,WASHINGTON,,,Naches Heights
+USA,WASHINGTON,,,Ancient Lakes of Columbia Valley
+USA,WASHINGTON,,,Royal Slope
+USA,WASHINGTON,,,Candy Mountain
+USA,WASHINGTON,,,White Bluffs
+USA,WASHINGTON,,,The Burn of Columbia Valley
+USA,WASHINGTON,,,Goose Gap
+USA,WASHINGTON,,,Rocky Reach
+USA,WEST VIRGINIA,,,Kanawha River Valley
+USA,WISCONSIN,,,Lake Wisconsin
+USA,WISCONSIN,,,Wisconsin Ledge
+USA,"Virginia, West Virginia",,,Shenandoah Valley
+USA,"Indiana, Kentucky, Ohio, West Virginia",,,Ohio River Valley
+USA,"New York, Ohio, Pennsylvania",,,Lake Erie
+USA,"Oregon, Washington",,,Walla Walla Valley
+USA,"New Jersey, Pennsylvania",,,Central Delaware Valley
+USA,"Connecticut, Rhode Island, Massachusetts",,,Southeastern New England
+USA,"Mississippi, Louisiana, Tennessee",,,Mississippi Delta
+USA,"Oregon, Washington",,,Columbia Valley
+USA,"New Mexico, Texas",,,Mesilla Valley
+USA,"Maryland, Pennsylvania",,,Cumberland Valley
+USA,"Arkansas, Missouri, Oklahoma",,,Ozark Mountain
+USA,"Oregon, Washington",,,Columbia Gorge
+USA,"Idaho, Oregon",,,Snake River Valley
+USA,"Illinois, Iowa, Minnesota, Wisconsin",,,Upper Mississippi River Valley
+USA,"Georgia, North Carolina",,,Upper Hiwassee Highlands
+USA,"Iowa, Missouri",,,Loess Hills District
+USA,"Idaho, Washington",,,Lewis-Clark Valley
+USA,"North Carolina, Tennessee, Virginia",,,Appalachian High Country
+New Zealand,,North Island,,Northland
+New Zealand,,North Island,,Auckland
+New Zealand,,North Island,,Waiheke Island
+New Zealand,,North Island,,Gisborne
+New Zealand,,North Island,,Hawke's Bay
+New Zealand,,North Island,,Central Hawke's Bay
+New Zealand,,North Island,,Wairarapa
+New Zealand,,North Island,,Gladstone
+New Zealand,,North Island,,Martinborough
+New Zealand,,North Island,,Waikato/Bay of Plenty
+New Zealand,,North Island,,Kapiti Coast
+New Zealand,,South Island,,Nelson
+New Zealand,,South Island,,Marlborough
+New Zealand,,South Island,,Canterbury
+New Zealand,,South Island,,North Canterbury
+New Zealand,,South Island,,Waipara Valley
+New Zealand,,South Island,,Waitaki Valley (North Otago)
+New Zealand,,South Island,,Otago
+New Zealand,,South Island,,Central Otago
+New Zealand,,South Island,,South Island

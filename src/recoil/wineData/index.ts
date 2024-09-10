@@ -11,7 +11,7 @@ export const wineCsvDataSelector = selector<WineData[]>({
   key: 'wineCsvDataSelector',
   get: async () => {
     try {
-      const response = await fetch('./expanded_data.csv');
+      const response = await fetch('./USA_NewZealand.csv');
       const reader = response.body?.getReader();
       const result = await reader?.read();
       const decoder = new TextDecoder('utf-8');
