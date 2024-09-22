@@ -6,6 +6,7 @@ export type csvWineData = {
   Latitude: string;
   Longitude: string;
   Region: string;
+  State: string;
 };
 
 export type WineData = csvWineData & {
@@ -25,7 +26,7 @@ export function isChildrenTree(value: Tree | WineData): value is Tree {
 
 export function makeTree(csvData: WineData[], ...columns: (keyof WineData)[]): Tree | WineData {
   console.log({ csvData });
-  return buildTree(csvData, columns);
+  return buildTree(csvData, [...columns]);
 }
 
 const buildTree = (rows: WineData[], columns: (keyof WineData)[]) => {
@@ -33,37 +34,77 @@ const buildTree = (rows: WineData[], columns: (keyof WineData)[]) => {
     name: 'wine',
     children: rows,
   };
-  const shift = columns.shift();
-  if (!shift) return tree;
-  tree.children = buildNodes(tree.children, shift);
-  loop(tree, columns);
+  if (columns.length <= 1) return tree;
+
+  // depth 1 제작
+  const { result, nextColumns } = buildNodes(tree.children, columns);
+
+  tree.children = result;
+
+  // depth 1 리스트 bfs로 buildNodes 수행
+  loop(tree, nextColumns);
+  updateChildrenWithLength(tree)
   return tree;
 };
 
-function loop(current: Tree, columns: (keyof WineData)[]) {
-  if (columns.length == 1) return;
-  const col = columns.shift();
-  if (!col) return;
-  (current.children as Tree[]).forEach((child: Tree) => {
-    console.log({child});
-    child.children = buildNodes(child.children, col);
-    loop(child, [...columns]);
-  });
-}
-
-const buildNodes = (rows: (Tree | WineData)[], col: keyof WineData) => {
-  console.log({ rows, col });
-  const groupBy = Object.groupBy(rows, (row: any) => row[col]);
-  const entries = Object.entries(groupBy) as [string, WineData[]][];
-  if (entries.length === 1 && entries[0][0] === '') {
-    return rows;
+const buildNodes = (rows: (Tree | WineData)[], columns: (keyof WineData)[]) => {
+  const { entries, nextColumns } = entriesOfgroupBy(rows, columns);
+  if (entries.length == 1 && entries[0][0] == 'undefined') {
+    return { result: entries[0][1], nextColumns };
   }
-  return entries.reduce((node: Tree[], [name, children]) => {
+  const result = entries.reduce((acc, [name, children]) => {
     const child = {
       name,
       children,
     };
-    node.push(child);
-    return node;
-  }, []);
+    acc.push(child);
+    return acc;
+  }, [] as Tree[]);
+  return { result, nextColumns };
 };
+
+function loop(current: Tree, columns: (keyof WineData)[]) {
+  if (!columns.length) return;
+  (current.children as Tree[]).forEach((child: Tree) => {
+    const { result, nextColumns } = buildNodes(child.children, columns);
+    child.children = result;
+    loop(child, nextColumns);
+  });
+}
+
+function entriesOfgroupBy(rows: (Tree | WineData)[], columns: (keyof WineData)[]) {
+  const groupBy = Object.groupBy(rows, (row: any) => row[columns[0]]);
+  const entries = Object.entries(groupBy) as [string, WineData[]][];
+  if (columns.length && entries.length === 1 && (!entries[0][0] || entries[0][0] == 'undefined')) {
+    return entriesOfgroupBy(entries[0][1], columns.slice(1));
+  }
+  return { entries, nextColumns: columns.slice(1) };
+}
+
+function updateChildrenWithLength(node: any) {
+  node.children = node.children.filter((child: Tree) => child.name != '');
+  if (!Array.isArray(node.children)) {
+    return;
+  }
+
+  const filter = node.children?.filter?.((child: Tree) =>
+    Object.prototype.hasOwnProperty.call(child, 'name')
+  );
+
+  if (!filter?.length) {
+    node.children = node.children.length;
+    return;
+  }
+
+  const allChildrenAreObjects = node.children
+    ?.filter((child: Tree) => Object.prototype.hasOwnProperty.call(child, 'name'))
+    ?.every((child: Tree) => Object.prototype.hasOwnProperty.call(child, 'name'));
+
+  if (!allChildrenAreObjects) {
+    node.children = node.children.length;
+  } else {
+    node.children.forEach(updateChildrenWithLength);
+  }
+
+  return node;
+}

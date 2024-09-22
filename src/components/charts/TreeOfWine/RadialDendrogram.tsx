@@ -99,9 +99,11 @@ function useChartData(
         .size([2 * Math.PI, radius])
         .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth)(tree);
     }
+    tree.count();
 
     const nodeData = tree.descendants().reverse();
     const linkData = tree.links();
+
     return { nodeData, linkData };
   }, [data, fittingToTheEnd, width]);
   return { nodeData, linkData, width };

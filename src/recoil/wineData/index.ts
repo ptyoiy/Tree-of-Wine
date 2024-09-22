@@ -4,7 +4,15 @@ import Papa from 'papaparse';
 import { selector } from 'recoil';
 import { csvWineData, makeTree, Tree, WineData } from '../../utils/makeTree';
 
-export const COLUMNS: (keyof WineData)[] = ['Country', 'Region', 'Designation'];
+/**
+ * Tree of Wine의 분기 순서
+ ** 배열 요소 순서대로 분기됨
+ ** 데이터가 없는 속성의 경우 분기되지 않음
+ * @example const columns = ['Country', 'Region', 'EstateDate', 'Designation']
+ * 위 상황에서 만약 분기 도중 EstateDate 속성의 값이 없을 경우
+ * Country, Region, Designation 3단계로 분기됨
+ */
+export const COLUMNS: (keyof WineData)[] = ['Country', 'State', "Region"]
 
 // CSV 데이터를 비동기로 가져오는 selector 정의
 export const wineCsvDataSelector = selector<WineData[]>({

@@ -1,8 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import { useRecoilValue } from 'recoil';
 import { treeDataSelector } from '../../../recoil/wineData';
-import { BubbleChart } from '../../charts/bubble';
-import { Chart } from '../../charts/wrapper';
 
 const RightSection = () => {
   const data = useRecoilValue(treeDataSelector);
@@ -16,7 +14,7 @@ const RightSection = () => {
         gap: '1px',
       }}
     >
-      <Chart render={BubbleChart} chartProps={{ data }} />
+      {/* <Chart render={BubbleChart} chartProps={{ data }} /> */}
       <Paper>Select Statistic Info Chart</Paper>
       <Paper>Mini-Map</Paper>
     </Box>
